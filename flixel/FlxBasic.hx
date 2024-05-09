@@ -77,6 +77,11 @@ class FlxBasic implements IFlxDestroyable
 	 */
 	public var container(get, null):Null<FlxContainer>;
 
+	/**
+	 * The depth index of objects.
+	 */
+	public var zIndex:Int = 0;
+
 	public function new() {}
 
 	/**
