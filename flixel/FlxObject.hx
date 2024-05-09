@@ -585,6 +585,11 @@ class FlxObject extends FlxBasic
 	public var y(default, set):Float = 0;
 
 	/**
+	 * Z position of the upper left corner of this object in world space.
+	 */
+	public var z(default, set):Float = 0;
+
+	/**
 	 * The width of this object's hitbox. For sprites, use `offset` to control the hitbox position.
 	 */
 	@:isVar
@@ -1392,6 +1397,12 @@ class FlxObject extends FlxBasic
 	function set_y(value:Float):Float
 	{
 		return y = value;
+	}
+
+	@:noCompletion
+	function set_z(value:Float):Float
+	{
+		return z = value;
 	}
 
 	@:noCompletion
