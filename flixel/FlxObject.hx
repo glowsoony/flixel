@@ -1270,13 +1270,17 @@ class FlxObject extends FlxBasic
 	{
 		if (ignoreDrawDebug)
 			return;
+
+		final drawPath = path != null && !path.ignoreDrawDebug;
 		
 		for (camera in getCamerasLegacy())
 		{
 			drawDebugOnCamera(camera);
 
-			if (path != null && !path.ignoreDrawDebug)
-				path.drawDebug();
+			if (drawPath)
+			{
+				path.drawDebugOnCamera(camera);
+			}
 		}
 	}
 
