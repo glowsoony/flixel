@@ -893,6 +893,10 @@ class FlxText extends FlxSprite
 			var key:String = FlxG.bitmap.getUniqueKey("text");
 			makeGraphic(newWidth, newHeight, FlxColor.TRANSPARENT, false, key);
 
+			#if FLX_TRACK_GRAPHICS
+			graphic.trackingInfo = 'text($ID, $text)';
+			#end
+
 			if (_hasBorderAlpha)
 				_borderPixels = graphic.bitmap.clone();
 

@@ -617,10 +617,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 
 	public function hasValidStartEnd()
 	{
-		return startIndex >= 0
-			&& endIndex >= 0
-			&& startIndex < map.totalTiles
-			&& endIndex < map.totalTiles;
+		return map.tileExists(startIndex) && map.tileExists(endIndex);
 	}
 
 	public function destroy()
@@ -647,7 +644,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 	 */
 	inline function getX(tile:Int)
 	{
-		return tile % map.widthInTiles;
+		return map.getColumn(tile);
 	}
 
 	/**
@@ -655,7 +652,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 	 */
 	inline function getY(tile:Int)
 	{
-		return Std.int(tile / map.widthInTiles);
+		return map.getRow(tile);
 	}
 
 	/**
@@ -664,7 +661,7 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 	inline function getTileCollisionsByIndex(tile:Int)
 	{
 		#if debug numChecks++; #end
-		return map.getTileCollisions(map.getTileByIndex(tile));
+		return map.getTileData(tile).allowCollisions;
 	}
 }
 
