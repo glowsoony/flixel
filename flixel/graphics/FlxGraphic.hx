@@ -282,11 +282,6 @@ class FlxGraphic implements IFlxDestroyable
 	public var height(default, null):Int = 0;
 
 	/**
-	 * Depth of the cached 'BitmapData'
-	 */
-	public var depth(default, null):Int = 0;
-
-	/**
 	 * Asset name from `openfl.Assets`.
 	 */
 	public var assetsKey(default, null):String;

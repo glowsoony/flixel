@@ -628,12 +628,6 @@ class FlxObject extends FlxBasic
 	public var height(get, set):Float;
 
 	/**
-	 * The depth of this object's hitbox. For sprites, use `offset` to control the hitbox position.
-	 */
-	@:isVar
-	public var depth(get, set):Float;
-
-	/**
 	 * Whether or not the coordinates should be rounded during rendering.
 	 * Does not affect `copyPixels()`, which can only render on whole pixels.
 	 * Defaults to the camera's global `pixelPerfectRender` value,
@@ -1475,20 +1469,6 @@ class FlxObject extends FlxBasic
 	}
 
 	@:noCompletion
-	function set_depth(value:Float):Float
-	{
-		#if FLX_DEBUG
-		if (value < 0)
-		{
-			FlxG.log.warn("An object's depth cannot be smaller than 0. Use offset for sprites to control the hitbox position!");
-			return value;
-		}
-		#end
-		
-		return depth = value;
-	}
-
-	@:noCompletion
 	function get_width():Float
 	{
 		return width;
@@ -1498,12 +1478,6 @@ class FlxObject extends FlxBasic
 	function get_height():Float
 	{
 		return height;
-	}
-
-	@:noCompletion
-	function get_depth():Float
-	{
-		return depth;
 	}
 
 	@:noCompletion
