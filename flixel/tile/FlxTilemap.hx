@@ -779,6 +779,8 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 			for (column in minTileX...maxTileX)
 			{
 				final tile = getTileData(column, row);
+				if (tile == null)
+					continue;
 				tile.orientAt(xPos, yPos, column, row);
 				if (tile.overlapsObject(object) && (filter == null || filter(tile)))
 				{
@@ -930,8 +932,9 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 		final startIndex = getMapIndex(start);
 		final endIndex = getMapIndex(end);
 
+		final tile = getTileData(startIndex);
 		// If the starting tile is solid, return the starting position
-		if (getTileData(startIndex).solid)
+		if (tile != null && tile.solid)
 		{
 			if (result != null)
 				result.copyFrom(start);
@@ -969,16 +972,13 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 			final inc = movesRight ? 1 : -1;
 			final offset = movesRight ? 1 : 0;
 			var tileX = startTileX;
-			var tileY = 0;
-			var xPos = 0.0;
-			var yPos = 0.0;
 			var lastTileY = startTileY;
 
 			while (tileX != endTileX)
 			{
-				xPos = getColumnPos(tileX + offset);
-				yPos = m * xPos + b;
-				tileY = getRowAt(yPos);
+				final xPos = getColumnPos(tileX + offset);
+				final yPos = m * getColumnPos(tileX + offset) + b;
+				final tileY = getRowAt(yPos);
 				hitIndex = checkColumn(tileX, lastTileY, tileY);
 				if (hitIndex != -1)
 					break;
@@ -1038,8 +1038,9 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 		final step = startY <= endY ? 1 : -1;
 		while (true)
 		{
-			var index = getMapIndex(x, y);
-			if (getTileData(index).solid)
+			final index = getMapIndex(x, y);
+			final tile = getTileData(index);
+			if (tile != null && tile.solid)
 				return index;
 			
 			if (y == endY)
@@ -1100,7 +1101,8 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 			var tileX = Math.floor(curX / scaledTileWidth);
 			var tileY = Math.floor(curY / scaledTileHeight);
 			
-			if (getTileData(tileX, tileY).solid)
+			final tile = getTileData(tileX, tileY);
+			if (tile != null && tile.solid)
 			{
 				// Some basic helper stuff
 				tileX *= Std.int(scaledTileWidth);
@@ -1392,12 +1394,6 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 		setDirty();
 	}
 	#end
-
-	/** Guards against -1 */
-	override function setTileHelper(mapIndex:Int, tileIndex:Int, updateGraphics:Bool = true):Bool
-	{
-		return super.setTileHelper(mapIndex, tileIndex < 0 ? 0 : tileIndex, updateGraphics);
-	}
 
 	/**
 	 * Internal function used in setTileIndex() and the constructor to update the map.
