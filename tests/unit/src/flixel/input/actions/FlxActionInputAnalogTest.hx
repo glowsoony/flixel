@@ -504,7 +504,7 @@ class FlxActionInputAnalogTest extends FlxTest
 	{
 		if (FlxG.mouse == null)
 			return;
-		FlxG.mouse.setGlobalScreenPositionUnsafe(0, 0);
+		FlxG.mouse.setRawPositionUnsafe(0, 0);
 
 		var left = @:privateAccess FlxG.mouse._leftButton;
 		var right = @:privateAccess FlxG.mouse._rightButton;
@@ -581,7 +581,7 @@ class FlxActionInputAnalogTest extends FlxTest
 	{
 		if (FlxG.mouse == null)
 			return;
-		FlxG.mouse.setGlobalScreenPositionUnsafe(0, 0);
+		FlxG.mouse.setRawPositionUnsafe(0, 0);
 		step();
 		step();
 	}
@@ -601,7 +601,7 @@ class FlxActionInputAnalogTest extends FlxTest
 		if (FlxG.mouse == null)
 			return;
 		step();
-		FlxG.mouse.setGlobalScreenPositionUnsafe(X, Y);
+		FlxG.mouse.setRawPositionUnsafe(X, Y);
 		updateActions(arr);
 	}
 
@@ -628,7 +628,7 @@ class FlxActionInputAnalogTest extends FlxTest
 		if (FlxG.mouse == null)
 			return;
 		step();
-		FlxG.mouse.setGlobalScreenPositionUnsafe(X, Y);
+		FlxG.mouse.setRawPositionUnsafe(X, Y);
 		updateActions(arr);
 	}
 

@@ -982,7 +982,7 @@ class FlxActionManagerTest extends FlxTest
 		if (FlxG.mouse == null)
 			return;
 		step();
-		FlxG.mouse.setGlobalScreenPositionUnsafe(X, Y);
+		FlxG.mouse.setRawPositionUnsafe(X, Y);
 		@:privateAccess manager.update();
 	}
 
