@@ -190,7 +190,7 @@ class FlxPointer
 	 * @param   camera         Helps determine the world position. If unspecified, `FlxG.camera` is used
 	 */
 	@:access(flixel.group.FlxTypedGroup.resolveGroup)
-	public function overlaps(objectorgroup:FlxBasic, ?camera:FlxCamera):Bool
+	public function overlaps(objectOrGroup:FlxBasic, ?camera:FlxCamera):Bool
 	{
 		// check group
 		final group = FlxTypedGroup.resolveGroup(objectOrGroup);

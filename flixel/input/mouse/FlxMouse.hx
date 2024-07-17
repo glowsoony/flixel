@@ -758,7 +758,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	@:allow(flixel.system.replay.FlxReplay)
 	function record():MouseRecord
 	{
-		if ((_lastX == gameX) && (_lastY == fameY)
+		if ((_lastX == gameX) && (_lastY == gameY)
 			&& (_lastLeftButtonState == _leftButton.current)
 			&& (_lastWheel == wheel))
 		{
