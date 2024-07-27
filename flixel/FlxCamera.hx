@@ -24,6 +24,7 @@ import flixel.util.FlxSpriteUtil;
 import openfl.Vector;
 import openfl.display.BlendMode;
 import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
 
 using flixel.util.FlxColorTransformUtil;
 
@@ -597,6 +598,46 @@ class FlxCamera extends FlxBasic
 	static var renderPoint:FlxPoint = FlxPoint.get();
 
 	static var renderRect:FlxRect = FlxRect.get();
+
+	// Both shader functions borrowed from CNE (CodenameEngine).
+	
+	/**
+	 * Adds a FlxShader as a filter to the camera
+	 * @param shader Shader to add
+	 * @return ShaderFilter
+	 */
+	public function addShader(shader:FlxShader)
+	{
+		var filter:ShaderFilter = null;
+		if (filters == null)
+			filters = [];
+		filters.push(filter = new ShaderFilter(shader));
+		return filter;
+	}
+	
+	/**
+	 * Removes a FlxShader's ShaderFilter from the camera.
+	 * @param shader Shader to remove
+	 * @return Whenever the shader has been successfully removed or not.
+	 */
+	public function removeShader(shader:FlxShader):Bool
+	{
+		if (filters == null)
+			filters = [];
+		for (f in filters)
+		{
+			if (f is ShaderFilter)
+			{
+				var sf = cast(f, ShaderFilter);
+				if (sf.shader == shader)
+				{
+					filters.remove(f);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	@:noCompletion
 	public function startQuadBatch(graphic:FlxGraphic, colored:Bool, hasColorOffsets:Bool = false, ?blend:BlendMode, smooth:Bool = false, ?shader:FlxShader)
