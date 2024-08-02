@@ -9,6 +9,7 @@ class FlxPointer
 {
 	/** The position in the world */
 	public var x(default, null):Int = 0;
+
 	/** The position in the world */
 	public var y(default, null):Int = 0;
 
@@ -74,12 +75,14 @@ class FlxPointer
 	 */
 	public function getWorldPosition(?camera:FlxCamera, ?result:FlxPoint):FlxPoint
 	{
-		camera = FlxG.camera;
+		if (camera == null)
+			camera = FlxG.camera;
 		
 		getViewPosition(camera, result);
 		result.addPoint(camera.scroll);
 		return result;
 	}
+
 	/**
 	 * The position relative to the game's position in the window, where `(0, 0)` is the
 	 * top-left edge of the game and `(FlxG.width, FlxG.height)` is the bottom-right
@@ -107,7 +110,6 @@ class FlxPointer
 	 * @param   camera  If unspecified, `FlxG.camera` is used, instead
 	 * @param   result  An existing point to store the results, if unspecified, one is created
 	 */
-	@:access(flixel.FlxCamera)
 	public function getViewPosition(?camera:FlxCamera, ?result:FlxPoint):FlxPoint
 	{
 		if (camera == null)
