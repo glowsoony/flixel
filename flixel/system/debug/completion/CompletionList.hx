@@ -82,7 +82,7 @@ class CompletionList extends Sprite
 		addChild(scrollBar);
 	}
 
-	function onKeyDown(e:KeyboardEvent)
+	public function onKeyDown(e:KeyboardEvent)
 	{
 		if (!visible)
 			return;
