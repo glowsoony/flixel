@@ -121,7 +121,9 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		
 		final shader = shader != null ? shader : graphics.shader;
 
-		if (shaders == null) throw 'Attempted to use a invaild shader, is the shader vaild?';
+		if (shader == null) 
+			throw 'Attempted to use a invaild shader, is the shader vaild?';
+		
 		shader.bitmap.input = graphics.bitmap;
 		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
 		shader.alpha.value = alphas;
