@@ -62,7 +62,7 @@ class FlxGraphicsShader extends GraphicsShader
 			}
 			return vec4(0.0, 0.0, 0.0, 0.0);
 		}
-	")
+	", true)
 	@:glFragmentSource("
 		#pragma header
 		
