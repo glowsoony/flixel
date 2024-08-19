@@ -116,10 +116,7 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 			return;
 
 		try
-		{
-			if (graphics == null) 
-				throw 'Attempted to render an invaild FlxDrawItem, does the sprite exist?';
-			
+		{			
 			// TODO: catch this error when the dev actually messes up, not in the draw phase
 			if (shader == null && graphics.isDestroyed)
 				throw 'Attempted to render an invalid FlxDrawItem, did you destroy a cached sprite?';
@@ -128,6 +125,15 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 	
 			if (shader == null) 
 				throw 'Attempted to use a invaild shader, is the shader vaild?';
+
+			if (graphics == null) 
+				throw 'Attempted to render an invaild FlxDrawItem, does the sprite exist?';
+
+			if (shader.bitmap == null) 
+				throw 'Attempted to use a invaild shader bitmap, does the bitmap exist?';
+
+			if (graphics.bitmap == null) 
+				throw 'Attempted to render an invaild FlxDrawItem\'s bitmap, does the sprite.bitmap exist?';
 			
 			shader.bitmap.input = graphics.bitmap;
 			shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
