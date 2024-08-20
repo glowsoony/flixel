@@ -1202,51 +1202,6 @@ class FlxCamera extends FlxBasic
 
 		updateFlashSpritePosition();
 		updateShake(elapsed);
-
-		if (filtersEnabled && flashSprite.filters != null)
-		{
-			// var rect = _scrollRect.scrollRect;
-
-			// if (rect == null)
-			// {
-			//	rect = calculateScrollRect();
-			// }
-
-			var w = width * initialZoom * FlxG.scaleMode.scale.x * FlxG.stage.window.scale;
-			var h = height * initialZoom * FlxG.scaleMode.scale.y * FlxG.stage.window.scale;
-
-			for (f in flashSprite.filters)
-			{
-				if (f is ShaderFilter)
-				{
-					var f:ShaderFilter = cast f;
-					if (f.shader is FlxGraphicsShader)
-					{
-						var shader:FlxGraphicsShader = cast f.shader;
-
-						/*if (rect != null)
-							{
-							shader.setCamSize(rect.x
-								+ (_scrollRect.x + (w * 0.5)), rect.y
-								+ (_scrollRect.y + (h * 0.5)),
-								rect.width
-								- (2 * (_scrollRect.x + (w * 0.5))), rect.height
-								- (2 * (_scrollRect.y + (h * 0.5))));
-						}*/
-						/*shader.setCamSize(0
-							+ (_scrollRect.x + (w * 0.5)), 0
-							+ (_scrollRect.y + (h * 0.5)), w
-							- (2 * (_scrollRect.x + (w * 0.5))),
-							h
-							- (2 * (_scrollRect.y + (h * 0.5)))); */
-
-						shader.setCamSize(0, 0, w, h);
-
-						// trace(shader._camSize.value);
-					}
-				}
-			}
-		}
 	}
 
 	/**
