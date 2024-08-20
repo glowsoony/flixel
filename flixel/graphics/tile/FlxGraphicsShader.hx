@@ -96,6 +96,7 @@ class FlxGraphicsShader extends GraphicsShader
 
 	public function setCamSize(x:Float, y:Float, width:Float, height:Float)
 	{
-		_camSize.value = [x, y, width, height];
+		if (data != null && data._camSize != null)
+			data._camSize.value = [x, y, width, height];
 	}
 }
