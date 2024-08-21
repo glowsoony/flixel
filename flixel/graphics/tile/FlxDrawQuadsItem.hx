@@ -115,49 +115,42 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (rects.length == 0)
 			return;
 
-		try
-		{			
-			// TODO: catch this error when the dev actually messes up, not in the draw phase
-			if (shader == null && graphics.isDestroyed)
-				throw 'Attempted to render an invalid FlxDrawItem, did you destroy a cached sprite?';
+		// TODO: catch this error when the dev actually messes up, not in the draw phase
+		if (shader == null && graphics.isDestroyed)
+			throw 'Attempted to render an invalid FlxDrawItem, did you destroy a cached sprite?';
 			
-			final shader = shader != null ? shader : graphics.shader;
-	
-			if (shader == null) 
-				throw 'Attempted to use a invaild shader, is the shader vaild?';
+		final shader = shader != null ? shader : graphics.shader;
+		
+		if (shader == null)
+			throw 'Attempted to use a invaild shader, is the shader vaild?';
 
-			if (graphics == null) 
-				throw 'Attempted to render an invaild FlxDrawItem, does the sprite exist?';
+		if (graphics == null)
+			throw 'Attempted to render an invaild FlxDrawItem, does the sprite exist?';
 
-			if (shader.bitmap == null) 
-				throw 'Attempted to use a invaild shader bitmap, does the bitmap exist?';
+		if (shader.bitmap == null)
+			throw 'Attempted to use a invaild shader bitmap, does the bitmap exist?';
 
-			if (graphics.bitmap == null) 
-				throw 'Attempted to render an invaild FlxDrawItem\'s bitmap, does the sprite.bitmap exist?';
+		if (graphics.bitmap == null)
+			throw 'Attempted to render an invaild FlxDrawItem\'s bitmap, does the sprite.bitmap exist?';
 			
-			shader.bitmap.input = graphics.bitmap;
-			shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
-			shader.alpha.value = alphas;
-	
-			if (colored || hasColorOffsets)
-			{
-				shader.colorMultiplier.value = colorMultipliers;
-				shader.colorOffset.value = colorOffsets;
-			}
-	
-			setParameterValue(shader.hasTransform, true);
-			setParameterValue(shader.hasColorTransform, colored || hasColorOffsets);
-	
-			#if (openfl > "8.7.0")
-			camera.canvas.graphics.overrideBlendMode(blend);
-			#end
-			camera.canvas.graphics.beginShaderFill(shader);
-			camera.canvas.graphics.drawQuads(rects, null, transforms);
-		}
-		catch(e:haxe.Exception)
+		shader.bitmap.input = graphics.bitmap;
+		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
+		shader.alpha.value = alphas;
+		
+		if (colored || hasColorOffsets)
 		{
-			lime.app.Application.current.window.alert(e.message, 'Error on shader in FlxDrawQuadItem');
+			shader.colorMultiplier.value = colorMultipliers;
+			shader.colorOffset.value = colorOffsets;
 		}
+		
+		setParameterValue(shader.hasTransform, true);
+		setParameterValue(shader.hasColorTransform, colored || hasColorOffsets);
+		
+		#if (openfl > "8.7.0")
+		camera.canvas.graphics.overrideBlendMode(blend);
+		#end
+		camera.canvas.graphics.beginShaderFill(shader);
+		camera.canvas.graphics.drawQuads(rects, null, transforms);
 		super.render(camera);
 	}
 
