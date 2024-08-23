@@ -1168,6 +1168,8 @@ class FlxText extends FlxSprite
 			case OUTLINE:
 				// Render an outline around the text
 				// (do 8 offset draw calls)
+				applyFormats(_formatAdjusted, true);
+
 				final iterations = FlxMath.maxInt(1, Std.int(borderSize * borderQuality));
 				var i = iterations + 1;
 				while (i-- > 1)
@@ -1401,6 +1403,10 @@ enum abstract FlxTextAlign(String) from String
 	{
 		return switch (align)
 		{
+			// This `null` check is needed for HashLink, otherwise it will cast
+			// a `null` alignment to 0 which results in returning `CENTER`
+			// instead of the default `LEFT`.
+			case null: LEFT;
 			case TextFormatAlign.LEFT: LEFT;
 			case TextFormatAlign.CENTER: CENTER;
 			case TextFormatAlign.RIGHT: RIGHT;
