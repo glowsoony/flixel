@@ -2123,7 +2123,7 @@ class FlxCamera extends FlxBasic
 	function set_angle(Angle:Float):Float
 	{
 		angle = Angle;
-		flashSprite.rotation = Angle;
+		_rotationCanvas.rotation = Angle;
 		return Angle;
 	}
 
