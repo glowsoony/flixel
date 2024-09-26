@@ -23,7 +23,7 @@ class FlxGraphicsShader extends GraphicsShader
 				openfl_ColorOffsetv = colorOffset / 255.0;
 				openfl_ColorMultiplierv = colorMultiplier;
 			}
-		}", true)
+		}")
 	@:glFragmentHeader("
 		uniform bool hasTransform;
 		uniform bool hasColorTransform;
@@ -75,14 +75,14 @@ class FlxGraphicsShader extends GraphicsShader
 		vec4 textureCam(sampler2D bitmap, vec2 pos) {
 			return flixel_texture2D(bitmap, camToOg(pos));
 		}
-		", true)
+		")
 	@:glFragmentSource("
 		#pragma header
 		
 		void main(void)
 		{
 			gl_FragColor = flixel_texture2D(bitmap, openfl_TextureCoordv);
-		}", true)
+		}")
 	public function new()
 	{
 		super();
