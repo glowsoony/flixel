@@ -1,4 +1,4 @@
-5.9.0 (TBD)
+5.9.0 (December 12, 2024)
 
 #### New features:
 - `FlxInputText`: Add improved input text to core flixel (flixel-ui's implementation will be deprecated) ([#3219](https://github.com/HaxeFlixel/flixel/pull/3219))
@@ -17,31 +17,23 @@
 - `FlxRect`: Add `clipTo` and fix `intersection` bug ([#3190](https://github.com/HaxeFlixel/flixel/pull/3190))
 - `FlxPointer`: Add `getGamePosition`, `gameX/Y`, `getViewPosition`, and `viewX/Y`, to replace "screen" fields ([#3210](https://github.com/HaxeFlixel/flixel/pull/3210))
 - `FlxAnimationController`: Add `onLoop`, `onFrameChange` and `onFinish`, to replace `callback` and `finishCallback` ([#3205](https://github.com/HaxeFlixel/flixel/pull/3205)) ([#3216](https://github.com/HaxeFlixel/flixel/pull/3216))
-- `FlxStrip`: Add support for blendmodes ([3213](https://github.com/HaxeFlixel/flixel/pull/3213))
-- `FlxTextBorderStyle`: Add SHADOW_XY, prevent border clipping ([3236](https://github.com/HaxeFlixel/flixel/pull/3236))
-- `LogStyle`: add `callback` to replace `callbackFunction` ([3239](https://github.com/HaxeFlixel/flixel/pull/3239))
+- `FlxStrip`: Add support for blendmodes ([#3213](https://github.com/HaxeFlixel/flixel/pull/3213))
+- `FlxTextBorderStyle`: Add SHADOW_XY, prevent border clipping ([#3236](https://github.com/HaxeFlixel/flixel/pull/3236))
+- `LogStyle`: Add `onLog` signal to replace `callbackFunction` ([#3239](https://github.com/HaxeFlixel/flixel/pull/3239))([#3307](https://github.com/HaxeFlixel/flixel/pull/3307))
+- `FlxBar`: Add custom border sizes ([#3234](https://github.com/HaxeFlixel/flixel/pull/3234))
+- Gamepads: Add `acceptMode` and "mapped inputs" ([#3276](https://github.com/HaxeFlixel/flixel/pull/3276)) ([#3280](https://github.com/HaxeFlixel/flixel/pull/3280))
+  - Add `ACCEPT` and `CANCEL` input IDs that conditionally map to either `A` or `B` depending on `FlxG.gamepads.acceptMode`
+  - Add `gamepad.getMappedInput` to get an anum value of every possible gamepad input from various devices, i.e. `PS4(PS4ID.X)`
+- `FlxG.assets`: A way to overwrite and customize the way HaxeFlixel fetches or produces assets from ids ([#2982](https://github.com/HaxeFlixel/flixel/pull/2982))
+- `FlxG.cameras`: Add `insert` method ([#3290](https://github.com/HaxeFlixel/flixel/pull/3290))
+- `FlxSave`: Allow custom handling of parsing errors ([#3286](https://github.com/HaxeFlixel/flixel/pull/3286))
+- `FlxDirectionFlags`: Add `up`, `down`, `left` and `right` fields ([#3303](https://github.com/HaxeFlixel/flixel/pull/3303))
+- `FlxG.assets`: Add `getSoundAddExt` ([#3311](https://github.com/HaxeFlixel/flixel/pull/3311))
+- `FlxG.assets`: Add `-DFLX_DEFAULT_SOUND_EXT` to automatically append file extension to sound asset ids ([#3314](https://github.com/HaxeFlixel/flixel/pull/3314))
 
 #### Changes and improvements:
 - `FlxKey`: Add `NONE` to `fromStringMap` and `toStringMap` ([#3119](https://github.com/HaxeFlixel/flixel/pull/3119))
-- `FlxPreloader`: Improve documentation ([#3123](https://github.com/HaxeFlixel/flixel/pull/3123))
-- `FlxDrawTrianglesItem`: minor optimization ([#3121](https://github.com/HaxeFlixel/flixel/pull/3121))
-- `FlxTypedTilemap`: Add private `createTile` method for easier extension, with custom tile types ([#3154](https://github.com/HaxeFlixel/flixel/pull/3154))
-- `FlxState`: Improve doc for `persistentUpdate` & `persistentDraw` ([#3155](https://github.com/HaxeFlixel/flixel/pull/3155))
-- `FlxCamera`: Improve doc ([#3161](https://github.com/HaxeFlixel/flixel/pull/3161))
-- `NextState`: Improve doc ([#3160](https://github.com/HaxeFlixel/flixel/pull/3160))
-- `FlxSprite`: Account for `scale`, `origin`, `offset`, `angle` and `pixelPerfectPosition` in `getGraphicMidpoint` ([#3125](https://github.com/HaxeFlixel/flixel/pull/3125))
-- Major change to `FlxTilemap` and `FlxTiles` collision ([#3158](https://github.com/HaxeFlixel/flixel/pull/3158)) ([#3189](https://github.com/HaxeFlixel/flixel/pull/3189))
-  - `FlxTile`: Various features for allowing custom overlap/collision logic
-    - Add dynamic methods `overlapsObject` and `orientAt` with helpers `orient`, `orientByIndex` and `orientAtByIndex`
-    - Add `onCollide` signal, when overlaps are detected for collision purposes
-  - Tilemaps: Add various new tools and helpers to `FlxTilemap` and `FlxBaseTilemap`
-    - Added new `forEachOverlappingTile` which calls a method with every tile that overlaps an object
-    - Added new `forEachMapIndex` which calls a method with every tile of a certain tile index
-    - Added new `isOverlappingTile` method, allows you to check all tiles overlapping an object
-    - Added new `objectOverlapsTiles` to replace the now deprecated `overlapsWithCallbacks`
-      - Eschews `flipCallbackParams` arg, allowing better typing of both callback params
-      - Adds `isCollision` flag to control whether the Tiles' collision callbacks are fired and allows for processing non-solid tiles 
-    - Added new helpers: `getMapIndex`, `getMapIndexAt`, `getRow`, `getColumn`, `getTileIndex`, `getTileIndexAt`, `getTileData`, `getTileDataAt`, `tileExists`, `tileExistsAt`, `setTileIndex`, `setTileIndexAt`, `getColumnAt`, `getRowAt`, `columnExists`, `rowExists`, `columnExistsAt`, `rowExistsAt`, `getColumnPos`, `getRowPos`, `getColumnPosAt`, `getRowPosAt`, `getTilePos`, `getTilePosAt` and `getAllTilePos`
+@@ -45,126 +52,135 @@
     - `FlxObject`: Add internal helpers for processing tilemaps in `separate`, `updateTouchingFlags` and similar functions
     - Debug Drawing: Various improvements to debug drawing tilemaps
       - Now honors tiles' `ignoreDrawDebug` and `debugBoundingBoxColor` fields
@@ -51,6 +43,13 @@
 - Debugging: Check alpha when point-selecting sprites ([#3184](https://github.com/HaxeFlixel/flixel/pull/3184))
 - `FlxBitmapText`: Ignore border outline when computing field size ([#3193](https://github.com/HaxeFlixel/flixel/pull/3193))
 - `FlxDebugger`: Improve console code completion ([#3222](https://github.com/HaxeFlixel/flixel/pull/3222))
+- `FlxGraphicsShader`: Optimize color math ([#3227](https://github.com/HaxeFlixel/flixel/pull/3227))
+- Improve android config on lime 8.2.0 ([#3253](https://github.com/HaxeFlixel/flixel/pull/3253))
+- Debug Watch: Resize the watch window when watchers are added or removed ([#3251](https://github.com/HaxeFlixel/flixel/pull/3251))
+- Reduce memory of Flixel's embedded assets via oxipng ([#3257](https://github.com/HaxeFlixel/flixel/pull/3257))
+- Debug Stats: Improve accuracy of "Total Memory" in OpenFL 9.4.0 ([#3266](https://github.com/HaxeFlixel/flixel/pull/3266))
+- `FlxGraphic`: Improve checks for max texture size ([#3279](https://github.com/HaxeFlixel/flixel/pull/3279))([#3295](https://github.com/HaxeFlixel/flixel/pull/3295))
+- Debugging: Stop dispatching onFocus event when closing debugger ([#3271](https://github.com/HaxeFlixel/flixel/pull/3271))
 
 #### Bugfixes:
 - `FlxFlickerTween`: Fix "Unsupported recursive type" error on hl ([#3170](https://github.com/HaxeFlixel/flixel/pull/3170))
@@ -60,6 +59,10 @@
 - `FlxCamera`: Fix blending issue ([#3217](https://github.com/HaxeFlixel/flixel/pull/3217)) ([#3255](https://github.com/HaxeFlixel/flixel/pull/3255))
 - `FlxStrip`: Fix `color` preventing other strips from drawing ([#3220](https://github.com/HaxeFlixel/flixel/pull/3220))
 - `FlxButton`: Fix `label` position when moves is false ([#3232](https://github.com/HaxeFlixel/flixel/pull/3232))
+- Debug Console: Fix arrow keys ([#3247](https://github.com/HaxeFlixel/flixel/pull/3247))
+- `FlxGame`: Fix `ACTIVATE` and `DEACTIVATE` event dispatches ([#3260](https://github.com/HaxeFlixel/flixel/pull/3260))
+- `FlxAction`: Fix bug where multiple `check` calls wipe analog fields ([#3277](https://github.com/HaxeFlixel/flixel/pull/3277))
+- `FlxKeyManager`: Remove events on destroy, preventing crashes ([#3299](https://github.com/HaxeFlixel/flixel/pull/3299))
 
 5.8.0 (April 19, 2024)
 
@@ -510,7 +513,7 @@ The alpha was causing issues with CI due to haxelib issues. We're foregoing the 
 - `FlxKeyManager`: fixed `anyPressed([ANY])` not working ([#2253](https://github.com/HaxeFlixel/flixel/pull/2253))
 
 #### Changes and improvements:
-- Fixed `Std.is()` deprecation warnings with Haxe 4.2
+- Fixed `Std.isOfType)` deprecation warnings with Haxe 4.2
 
 4.7.0 (April 12, 2020)
 ------------------------------

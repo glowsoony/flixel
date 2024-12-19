@@ -629,7 +629,7 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * Clips the sprite inside the bounds of the text field, taking
 	 * `clipRect` into account.
 	 */
-	function clipSprite(sprite:FlxSprite)
+	function clipSprite(sprite:FlxSprite, border:Bool = false)
 	{
 		if (sprite == null)
 			return;
@@ -639,7 +639,8 @@ class FlxInputText extends FlxText implements IFlxInputText
 			rect = FlxRect.get();
 		rect.set(0, 0, sprite.width, sprite.height);
 		
-		var bounds = FlxRect.get(0, 0, width, height);
+		var bounds = border ? FlxRect.get(-fieldBorderThickness, -fieldBorderThickness, width + (fieldBorderThickness * 2),
+			height + (fieldBorderThickness * 2)) : FlxRect.get(0, 0, width, height);
 		if (clipRect != null)
 		{
 			bounds = bounds.clipTo(clipRect);
@@ -1216,6 +1217,7 @@ class FlxInputText extends FlxText implements IFlxInputText
 		_fieldBorderSprite.setPosition(x - fieldBorderThickness, y - fieldBorderThickness);
 		_backgroundSprite.setPosition(x, y);
 		clipSprite(_fieldBorderSprite);
+		clipSprite(_fieldBorderSprite, true);
 		clipSprite(_backgroundSprite);
 	}
 	
@@ -1760,6 +1762,7 @@ class FlxInputText extends FlxText implements IFlxInputText
 		super.set_clipRect(value);
 		
 		clipSprite(_backgroundSprite);
+		clipSprite(_fieldBorderSprite, true);
 		clipSprite(_fieldBorderSprite);
 		clipSprite(_caret);
 		for (box in _selectionBoxes)

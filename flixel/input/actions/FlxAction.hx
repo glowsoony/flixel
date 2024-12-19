@@ -435,40 +435,33 @@ class FlxAction implements IFlxDestroyable
 	 */
 	public function check():Bool
 	{
+		if (_timestamp == FlxG.game.ticks)
+			return triggered; // run no more than once per frame
+		
 		_x = null;
 		_y = null;
 
-		if (_timestamp == FlxG.game.ticks)
-		{
-			triggered = _checked;
-			return _checked; // run no more than once per frame
-		}
-
 		_timestamp = FlxG.game.ticks;
-		_checked = false;
+		triggered = false;
 
-		var len = inputs != null ? inputs.length : 0;
-		for (i in 0...len)
+		var i = inputs != null ? inputs.length : 0;
+		while (i-- > 0) // Iterate backwards, since we may remove items
 		{
-			var j = len - i - 1;
-			var input = inputs[j];
+			final input = inputs[i];
 
 			if (input.destroyed)
 			{
-				inputs.splice(j, 1);
+				inputs.remove(input);
 				continue;
 			}
 
 			input.update();
 
 			if (input.check(this))
-			{
-				_checked = true;
-			}
+				triggered = true;
 		}
 
-		triggered = _checked;
-		return _checked;
+		return triggered;
 	}
 
 	/**

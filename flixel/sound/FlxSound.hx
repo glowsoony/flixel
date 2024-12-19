@@ -7,7 +7,6 @@ import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxStringUtil;
-import openfl.Assets;
 import openfl.events.Event;
 import openfl.events.IEventDispatcher;
 import openfl.media.Sound;
@@ -16,9 +15,6 @@ import openfl.media.SoundTransform;
 import openfl.net.URLRequest;
 #if flash11
 import openfl.utils.ByteArray;
-#end
-#if (openfl >= "8.0.0")
-import openfl.utils.AssetType;
 #end
 
 /**
@@ -341,6 +337,8 @@ class FlxSound extends FlxBasic
 	/**
 	 * One of the main setup functions for sounds, this function loads a sound from an embedded MP3.
 	 *
+	 *  * **Note:** If the `FLX_SOUND_ADD_EXT` flag is enabled, you may omit the file extension
+	 *
 	 * @param	EmbeddedSound	An embedded Class object representing an MP3 file.
 	 * @param	Looped			Whether or not this sound should loop endlessly.
 	 * @param	AutoDestroy		Whether or not this FlxSound instance should be destroyed when the sound finishes playing.
@@ -365,8 +363,8 @@ class FlxSound extends FlxBasic
 		}
 		else if ((EmbeddedSound is String))
 		{
-			if (Assets.exists(EmbeddedSound, AssetType.SOUND) || Assets.exists(EmbeddedSound, AssetType.MUSIC))
-				_sound = Assets.getSound(EmbeddedSound);
+			if (FlxG.assets.exists(EmbeddedSound, SOUND))
+				_sound = FlxG.assets.getSoundUnsafe(EmbeddedSound);
 			else
 				FlxG.log.error('Could not find a Sound asset with an ID of \'$EmbeddedSound\'.');
 		}
