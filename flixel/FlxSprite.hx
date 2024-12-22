@@ -345,6 +345,12 @@ class FlxSprite extends FlxObject
 	var _scaledOrigin:FlxPoint;
 
 	/**
+	 *  Helper variable
+	 */
+	@:noCompletion
+	var _scaledFrameOffset:FlxPoint;
+
+	/**
 	 * These vars are being used for rendering in some of `FlxSprite` subclasses (`FlxTileblock`, `FlxBar`,
 	 * and `FlxBitmapText`) and for checks if the sprite is in camera's view.
 	 */
@@ -398,6 +404,7 @@ class FlxSprite extends FlxObject
 		_matrix = new FlxMatrix();
 		colorTransform = new ColorTransform();
 		_scaledOrigin = new FlxPoint();
+		_scaledFrameOffset = new FlxPoint();
 	}
 
 	/**
@@ -421,6 +428,7 @@ class FlxSprite extends FlxObject
 		scale = FlxDestroyUtil.put(scale);
 		_halfSize = FlxDestroyUtil.put(_halfSize);
 		_scaledOrigin = FlxDestroyUtil.put(_scaledOrigin);
+		_scaledFrameOffset = FlxDestroyUtil.put(_scaledFrameOffset);
 
 		framePixels = FlxDestroyUtil.dispose(framePixels);
 
@@ -851,6 +859,7 @@ class FlxSprite extends FlxObject
 	{
 		_frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
 		_matrix.translate(-origin.x, -origin.y);
+		_matrix.translate(-frameOffset.x, -frameOffset.y);
 		_matrix.scale(scale.x, scale.y);
 
 		if (bakedRotationAngle <= 0)
@@ -1355,12 +1364,13 @@ class FlxSprite extends FlxObject
 		if (pixelPerfectPosition)
 			newRect.floor();
 		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
+		_scaledFrameOffset.set(frameOffset.x * scale.x, frameOffset.y * scale.y);
 		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
 		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
 		if (isPixelPerfectRender(camera))
 			newRect.floor();
 		newRect.setSize(frameWidth * Math.abs(scale.x), frameHeight * Math.abs(scale.y));
-		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
+		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect, _scaledFrameOffset);
 	}
 	
 	/**
