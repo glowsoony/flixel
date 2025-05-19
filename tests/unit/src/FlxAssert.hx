@@ -59,7 +59,7 @@ class FlxAssert
 			Assert.fail('\nValue\n   ${actual}\nwas equal to\n   ${expected}\n', info);
 	}
 
-    public static function arrayContains<T>(array:Array<T>, item:T, ?msg:String, ?info:PosInfos):Void
+	public static function arrayContains<T>(array:Array<T>, item:T, ?msg:String, ?info:PosInfos):Void
 	{
 		if (array.contains(item))
 			Assert.assertionCount++;

@@ -28,7 +28,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * The global manager that handles input text objects.
 	 */
 	public static var globalManager:FlxInputTextManager;
-	
 	/**
 	 * The gaps at the sides of the text field (2px).
 	 */
@@ -54,7 +53,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * visible in the text field.
 	 */
 	public var bottomScrollV(get, never):Int;
-	
 	/**
 	 * The selection cursor's color. Has the same color as the text field by default, and 
 	 * it's automatically set whenever it changes.
@@ -73,7 +71,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * The selection cursor's width.
 	 */
 	public var caretWidth(default, set):Int = 1;
-	
 	/**
 	 * Whether or not the text field can be edited by the user.
 	 */
@@ -95,7 +92,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * Defines how to filter the text (remove unwanted characters).
 	 */
 	public var filterMode(default, set):FlxInputTextFilterMode = NONE;
-	
 	/**
 	 * Defines whether a letter case is enforced on the text.
 	 */
@@ -110,7 +106,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * Set the maximum length for the text field. 0 means unlimited.
 	 */
 	public var maxChars(get, set):Int;
-	
 	/**
 	 * The maximum value of `scrollH`.
 	 */
@@ -120,7 +115,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * The maximum value of `scrollV`.
 	 */
 	public var maxScrollV(get, never):Int;
-	
 	/**
 	 * Whether or not the text field will automatically be scrolled
 	 * when the user rolls the mouse wheel on the text field.
@@ -139,20 +133,19 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * from being copied.
 	 */
 	public var passwordMode(get, set):Bool;
-	
 	/**
 	 * Gets dispatched whenever the enter key is pressed on the text field
 	 * 
 	 * @param   text  The current text
 	 */
-	public final onEnter = new FlxTypedSignal<(text:String) -> Void>();
-	
+	public final onEnter = new FlxTypedSignal<(text:String)->Void>();
+
 	/**
 	 * Gets dispatched whenever this text field gains/loses focus
 	 * 
 	 * @param   focused  Whether the text is focused
 	 */
-	public final onFocusChange = new FlxTypedSignal<(focused:Bool) -> Void>();
+	public final onFocusChange = new FlxTypedSignal<(focused:Bool)->Void>();
 	
 	/**
 	 * Gets dispatched whenever the horizontal and/or vertical scroll is changed
@@ -160,7 +153,7 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * @param   scrollH  The current horizontal scroll
 	 * @param   scrollV  The current vertical scroll
 	 */
-	public final onScrollChange = new FlxTypedSignal<(scrollH:Int, scrollV:Int) -> Void>();
+	public final onScrollChange = new FlxTypedSignal<(scrollH:Int, scrollV:Int)->Void>();
 	
 	/**
 	 * Gets dispatched whenever the text is changed by the user
@@ -168,8 +161,8 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * @param   text  The current text
 	 * @param   text  What type of change occurred
 	 */
-	public final onTextChange = new FlxTypedSignal<(text:String, change:FlxInputTextChange) -> Void>();
-	
+	public final onTextChange = new FlxTypedSignal<(text:String, change:FlxInputTextChange)->Void>();
+
 	/**
 	 * The current horizontal scrolling position, in pixels. Defaults to
 	 * 0, which means the text is not horizontally scrolled.
@@ -182,12 +175,10 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * is set to 1 (not 0).
 	 */
 	public var scrollV(get, set):Int;
-	
 	/**
 	 * Whether or not the text can be selected by the user.
 	 */
 	public var selectable:Bool = true;
-	
 	/**
 	 * The color that the text inside the selection will change into, if
 	 * `useSelectedTextFormat` is enabled.
@@ -200,7 +191,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * **Warning:** Will be -1 if the text hasn't been selected yet!
 	 */
 	public var selectionBeginIndex(get, never):Int;
-	
 	/**
 	 * The color of the selection, shown behind the currently selected text.
 	 */
@@ -212,7 +202,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * **Warning:** Will be -1 if the text hasn't been selected yet!
 	 */
 	public var selectionEndIndex(get, never):Int;
-	
 	/**
 	 * If `false`, no extra format will be applied for selected text.
 	 * 
@@ -230,27 +219,22 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * An FlxSprite representing the background of the text field.
 	 */
 	var _backgroundSprite:FlxSprite;
-	
 	/**
 	 * An FlxSprite representing the selection cursor.
 	 */
 	var _caret:FlxSprite;
-	
 	/**
 	 * Internal variable for the current index of the selection cursor.
 	 */
 	var _caretIndex:Int = -1;
-	
 	/**
 	 * The timer used to flash the caret while the text field has focus.
 	 */
 	var _caretTimer:Float = 0;
-	
 	/**
 	 * An FlxSprite representing the border of the text field.
 	 */
 	var _fieldBorderSprite:FlxSprite;
-	
 	/**
 	 * Helper variable to prevent the text field from being unfocused from
 	 * clicking outside of the fieldif the focus has just been granted
@@ -262,13 +246,11 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * Internal variable that holds the camera that the text field is being pressed on.
 	 */
 	var _pointerCamera:FlxCamera;
-	
 	/**
 	 * Indicates whether or not the background sprites need to be regenerated due to a
 	 * change.
 	 */
 	var _regenBackground:Bool = false;
-	
 	/**
 	 * Indicates whether or not the selection cursor's size needs to be regenerated due
 	 * to a change.
@@ -281,17 +263,14 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * the respective line hasn't been selected yet.
 	 */
 	var _selectionBoxes:Array<FlxSprite> = [];
-	
 	/**
 	 * The format that will be used for text inside the current selection.
 	 */
 	var _selectionFormat:TextFormat = new TextFormat();
-	
 	/**
 	 * The current index of the selection from the caret.
 	 */
 	var _selectionIndex:Int = -1;
-	
 	#if FLX_POINTER_INPUT
 	/**
 	 * Stores the last time that this text field was pressed on, which helps to check for double-presses.
@@ -302,31 +281,26 @@ class FlxInputText extends FlxText implements IFlxInputText
 	 * Timer for the text field to scroll vertically when dragging over it.
 	 */
 	var _scrollVCounter:Float = 0;
-	
 	#if FLX_MOUSE
 	/**
 	 * Indicates whether the mouse is pressing down on this text field.
 	 */
 	var _mouseDown:Bool = false;
 	#end
-	
 	#if FLX_TOUCH
 	/**
 	 * Stores the FlxTouch that is pressing down on this text field, if there is one.
 	 */
 	var _currentTouch:FlxTouch;
-	
 	/**
 	 * Used for checking if the current touch has just moved on the X axis.
 	 */
 	var _lastTouchX:Null<Float>;
-	
 	/**
 	 * Used for checking if the current touch has just moved on the Y axis.
 	 */
 	var _lastTouchY:Null<Float>;
 	#end
-	
 	#end
 	
 	/**
@@ -393,7 +367,7 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		if (manager == this.manager)
 			return;
-			
+		
 		final hasFocus = this.manager.focus == this;
 		this.manager.unregisterInputText(this);
 		
@@ -480,13 +454,13 @@ class FlxInputText extends FlxText implements IFlxInputText
 	override function draw():Void
 	{
 		regenGraphic();
-		
+
 		drawSprite(_fieldBorderSprite);
 		drawSprite(_backgroundSprite);
-		
+
 		for (box in _selectionBoxes)
 			drawSprite(box);
-			
+
 		super.draw();
 		
 		drawSprite(_caret);
@@ -499,7 +473,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		endFocus();
 		manager.unregisterInputText(this);
-		
 		FlxDestroyUtil.destroy(onEnter);
 		FlxDestroyUtil.destroy(onFocusChange);
 		FlxDestroyUtil.destroy(onScrollChange);
@@ -519,10 +492,10 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		super.destroy();
 	}
-	
+
 	override function applyFormats(formatAdjusted:TextFormat, useBorderColor:Bool = false):Void
 	{
-		/// Scroll variables will be reset when `textField.setTextFormat()` is called,
+		// Scroll variables will be reset when `textField.setTextFormat()` is called,
 		// cache the current ones first.
 		var cacheScrollH = scrollH;
 		var cacheScrollV = scrollV;
@@ -531,7 +504,8 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		if (!useBorderColor && useSelectedTextFormat && selectionEndIndex > selectionBeginIndex)
 			textField.setTextFormat(_selectionFormat, selectionBeginIndex, selectionEndIndex);
-			
+
+		// Set the scroll back to how it was.
 		// This changes the internal text field's scroll instead to make sure that
 		// `__updateLayout()` gets called even if the scroll hasn't changed.
 		// If it doesn't get called here, it will be called when the text field
@@ -571,7 +545,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 				runCommand(cmd);
 		}
 	}
-	
 	/**
 	 * Replaces the currently selected text with `newText`, or just inserts it at
 	 * the selection cursor if there isn't any text selected.
@@ -596,7 +569,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		replaceText(beginIndex, endIndex, newText);
 	}
-	
 	/**
 	 * Sets the selection to span from `beginIndex` to `endIndex`. The selection cursor
 	 * will end up at `endIndex`.
@@ -608,10 +580,10 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		if (textField == null)
 			return;
-			
+
 		updateSelection();
 	}
-	
+
 	/**
 	 * Filters the specified text and adds it to the field at the current selection.
 	 */
@@ -624,7 +596,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			onTextChange.dispatch(text, INPUT_ACTION);
 		}
 	}
-	
 	/**
 	 * Clips the sprite inside the bounds of the text field, taking
 	 * `clipRect` into account.
@@ -664,7 +635,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			sprite.draw();
 		}
 	}
-	
 	/**
 	 * Returns the specified text filtered using `forceCase` and `filterMode`.
 	 * @param newText   The string to filter.
@@ -707,7 +677,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return newText;
 	}
-	
 	/**
 	 * Returns the X offset of the selection cursor based on the current alignment.
 	 * 
@@ -722,7 +691,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			default: GUTTER;
 		}
 	}
-	
 	/**
 	 * Gets the character index at a specific point on the text field.
 	 * 
@@ -734,12 +702,10 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		if (x < GUTTER)
 			x = GUTTER;
-			
 		if (y > textField.textHeight)
 			y = textField.textHeight;
 		if (y < GUTTER)
 			y = GUTTER;
-			
 		for (line in 0...textField.numLines)
 		{
 			var lineY = GUTTER + getLineY(line);
@@ -768,7 +734,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 						}
 					}
 				}
-				
 				// a character wasn't found, return the last character of the line
 				return lineEndIndex;
 			}
@@ -776,7 +741,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return text.length;
 	}
-	
 	/**
 	 * Gets the boundaries of the character at the specified index in the text field.
 	 * 
@@ -871,7 +835,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		}
 		return scrollY;
 	}
-	
 	/**
 	 * Calculates the bounds of the text field on the stage, which is used for setting the
 	 * text input rect for the Lime window.
@@ -903,7 +866,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return new lime.math.Rectangle(rect.x, rect.y, rect.width, rect.height);
 	}
-	
 	/**
 	 * Gets the Y offset of the current vertical scroll based on `scrollV`.
 	 */
@@ -911,7 +873,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		return getLineY(scrollV - 1);
 	}
-	
 	/**
 	 * Checks if the line the selection cursor is at is currently visible.
 	 */
@@ -920,7 +881,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		// `getLineIndexOfChar()` will return -1 if text is empty, but we still want the caret to show up
 		if (text.length == 0)
 			return true;
-			
 		var line = getLineIndexOfChar(_caretIndex);
 		return line >= scrollV - 1 && line <= bottomScrollV - 1;
 	}
@@ -1066,7 +1026,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 				restartCaretTimer();
 		}
 	}
-	
 	/**
 	 * Regenerates the background sprites if they're enabled.
 	 */
@@ -1074,9 +1033,9 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		if (!background)
 			return;
-			
+
 		_regenBackground = false;
-		
+			
 		if (fieldBorderThickness > 0)
 		{
 			_fieldBorderSprite.makeGraphic(Std.int(fieldWidth) + (fieldBorderThickness * 2), Std.int(fieldHeight) + (fieldBorderThickness * 2),
@@ -1100,7 +1059,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		updateBackgroundPosition();
 	}
-	
 	/**
 	 * Replaces the text at the specified range with `newText`, or just inserts it if
 	 * `beginIndex` and `endIndex` are the same.
@@ -1109,7 +1067,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		if (endIndex < beginIndex || beginIndex < 0 || endIndex > text.length || newText == null)
 			return;
-			
 		text = text.substring(0, beginIndex) + newText + text.substring(endIndex);
 		
 		_selectionIndex = _caretIndex = beginIndex + newText.length;
@@ -1137,7 +1094,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			case DELETE_LEFT:
 				if (!editable)
 					return;
-					
 				if (_selectionIndex == _caretIndex && _caretIndex > 0)
 				{
 					_selectionIndex = _caretIndex - 1;
@@ -1156,7 +1112,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			case DELETE_RIGHT:
 				if (!editable)
 					return;
-					
 				if (_selectionIndex == _caretIndex && _caretIndex < text.length)
 				{
 					_selectionIndex = _caretIndex + 1;
@@ -1216,7 +1171,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			
 		_fieldBorderSprite.setPosition(x - fieldBorderThickness, y - fieldBorderThickness);
 		_backgroundSprite.setPosition(x, y);
-		clipSprite(_fieldBorderSprite);
 		clipSprite(_fieldBorderSprite, true);
 		clipSprite(_backgroundSprite);
 	}
@@ -1265,13 +1219,12 @@ class FlxInputText extends FlxText implements IFlxInputText
 		if (_caret == null)
 			return;
 		_regenCaretSize = false;
-		
 		var lineHeight = height - (GUTTER * 2);
 		if (text.length > 0)
 		{
 			lineHeight = textField.getLineMetrics(0).height;
 		}
-		
+			
 		_caret.makeGraphic(caretWidth, Std.int(lineHeight));
 		clipSprite(_caret);
 	}
@@ -1339,10 +1292,10 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		var cacheScrollH = scrollH;
 		var cacheScrollV = scrollV;
-		
+
 		textField.setSelection(_selectionIndex, _caretIndex);
 		_regen = true;
-		
+
 		if (keepScroll)
 		{
 			scrollH = cacheScrollH;
@@ -1369,7 +1322,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		if (textField == null || _selectionBoxes == null)
 			return;
-			
 		var visibleLines = bottomScrollV - scrollV + 1;
 		while (_selectionBoxes.length > visibleLines)
 		{
@@ -1394,7 +1346,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		var beginV = scrollV - 1;
 		var scrollVOffset = getScrollVOffset();
-		
 		for (line in beginV...bottomScrollV)
 		{
 			var i = line - beginV;
@@ -1424,8 +1375,9 @@ class FlxInputText extends FlxText implements IFlxInputText
 						box = _selectionBoxes[i] = new FlxSprite();
 						box.color = selectionColor;
 					}
-					
-					var boxRect = FlxRect.get(startBoundaries.x - scrollH, startBoundaries.y - scrollVOffset, endBoundaries.right - startBoundaries.x,
+
+					var boxRect = FlxRect.get(startBoundaries.x - scrollH, startBoundaries.y - scrollVOffset,
+						endBoundaries.right - startBoundaries.x,
 						startBoundaries.height);
 					boxRect.clipTo(FlxRect.weak(0, 0, width, height)); // clip the selection box inside the text sprite
 					
@@ -1433,7 +1385,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 					box.makeGraphic(Std.int(boxRect.width), Std.int(boxRect.height));
 					clipSprite(box);
 					box.visible = true;
-					
 					boxRect.put();
 				}
 				else if (box != null)
@@ -1456,7 +1407,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		updateCaretPosition();
 		updateSelectionBoxes();
 	}
-	
 	/**
 	 * Updates all of the sprites' positions.
 	 */
@@ -1479,7 +1429,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		if (_mouseDown)
 		{
 			updatePointerDrag(FlxG.mouse, elapsed);
-			
 			if (FlxG.mouse.justMoved)
 			{
 				updatePointerMove(FlxG.mouse);
@@ -1495,7 +1444,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		{
 			_lastPressTime = 0;
 		}
-		
 		if (checkPointerOverlap(FlxG.mouse))
 		{
 			overlap = true;
@@ -1597,7 +1545,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 				break;
 			}
 		}
-		
 		pointerPos.put();
 		return overlap;
 	}
@@ -1617,7 +1564,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		relativePos.put();
 	}
-	
 	/**
 	 * Updates the text field's dragging while a pointer has pressed down on it.
 	 */
@@ -1650,7 +1596,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			}
 			_scrollVCounter = 0;
 		}
-		
 		if (scrollH != cacheScrollH || scrollV != cacheScrollV)
 		{
 			onScrollChange.dispatch(scrollH, scrollV);
@@ -1674,7 +1619,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			updateSelection(true);
 			restartCaretTimer();
 		}
-		
 		relativePos.put();
 	}
 	
@@ -1685,12 +1629,12 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		if (!hasFocus)
 			return;
-			
+		
+
 		if (hasFocus)
 		{
 			restartCaretTimer();
 		}
-		
 		_pointerCamera = null;
 		var currentTime = FlxG.game.ticks;
 		if (currentTime - _lastPressTime < 500)
@@ -1756,14 +1700,12 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return value;
 	}
-	
 	override function set_clipRect(value:FlxRect):FlxRect
 	{
 		super.set_clipRect(value);
 		
 		clipSprite(_backgroundSprite);
 		clipSprite(_fieldBorderSprite, true);
-		clipSprite(_fieldBorderSprite);
 		clipSprite(_caret);
 		for (box in _selectionBoxes)
 			clipSprite(box);
@@ -1781,7 +1723,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return value;
 	}
-	
 	override function set_fieldHeight(value:Float):Float
 	{
 		if (fieldHeight != value)
@@ -1872,7 +1813,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 					_selectionIndex = 0;
 					_caretIndex = 0;
 				}
-				
 				setSelection(_selectionIndex, _caretIndex);
 				if (hasFocus)
 				{
@@ -1887,7 +1827,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return value;
 	}
-	
 	override function set_x(value:Float)
 	{
 		if (x != value)
@@ -1945,7 +1884,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		
 		return value;
 	}
-	
 	inline function get_bottomScrollV():Int
 	{
 		return textField.bottomScrollV;
@@ -1958,7 +1896,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			caretColor = value;
 			_caret.color = caretColor;
 		}
-		
 		return value;
 	}
 	
@@ -1966,7 +1903,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		return _caretIndex;
 	}
-	
 	function set_caretIndex(value:Int):Int
 	{
 		if (value < 0)
@@ -1979,7 +1915,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 			setSelection(_caretIndex, _caretIndex);
 			restartCaretTimer();
 		}
-		
 		return value;
 	}
 	
@@ -1992,10 +1927,10 @@ class FlxInputText extends FlxText implements IFlxInputText
 			caretWidth = value;
 			_regenCaretSize = true;
 		}
-		
+
 		return value;
 	}
-	
+
 	function set_fieldBorderColor(value:FlxColor):FlxColor
 	{
 		if (fieldBorderColor != value)
@@ -2079,7 +2014,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 		{
 			textField.multiline = value;
 		}
-		
 		return value;
 	}
 	
@@ -2164,7 +2098,6 @@ class FlxInputText extends FlxText implements IFlxInputText
 	{
 		return FlxMath.maxInt(_caretIndex, _selectionIndex);
 	}
-	
 	function set_useSelectedTextFormat(value:Bool):Bool
 	{
 		if (useSelectedTextFormat != value)
@@ -2183,13 +2116,11 @@ enum abstract FlxInputTextChange(String) from String to String
 	 * Dispatched whenever new text is added by the user.
 	 */
 	var INPUT_ACTION = "input";
-	
 	/**
 	 * Dispatched whenever text to the left is removed by the user (pressing
 	 * backspace).
 	 */
 	var BACKSPACE_ACTION = "backspace";
-	
 	/**
 	 * Dispatched whenever text to the right is removed by the user (pressing
 	 * delete).
@@ -2203,12 +2134,10 @@ enum abstract FlxInputTextCase(Int) from Int to Int
 	 * Allows both lowercase and uppercase letters.
 	 */
 	var ALL_CASES = 0;
-	
 	/**
 	 * Changes all text to be uppercase.
 	 */
 	var UPPER_CASE = 1;
-	
 	/**
 	 * Changes all text to be lowercase.
 	 */
@@ -2221,22 +2150,18 @@ enum FlxInputTextFilterMode
 	 * Does not filter the text at all.
 	 */
 	NONE;
-	
 	/**
 	 * Only allows letters (a-z & A-Z) to be added to the text.
 	 */
 	ALPHABET;
-	
 	/**
 	 * Only allows numbers (0-9) to be added to the text.
 	 */
 	NUMERIC;
-	
 	/**
 	 * Only allows letters (a-z & A-Z) and numbers (0-9) to be added to the text.
 	 */
 	ALPHANUMERIC;
-	
 	/**
 	 * Uses a regular expression to filter the text. Characters that are matched
 	 * will be removed.

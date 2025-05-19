@@ -33,6 +33,7 @@ class FlxAnimationControllerTest extends FlxTest
 	}
 
 	@Test
+	@:haxe.warning("-WDeprecated")
 	function testCallbackAfterFirstLoadGraphic():Void
 	{
 		var timesCalled:Int = 0;
@@ -48,7 +49,7 @@ class FlxAnimationControllerTest extends FlxTest
 		Assert.areEqual(1, timesCalled);
 		Assert.areEqual(0, callbackFrameIndex);
 	}
-
+	
 	@Test
 	function testOnFrameChangeAfterFirstLoadGraphic():Void
 	{
@@ -59,18 +60,19 @@ class FlxAnimationControllerTest extends FlxTest
 			timesCalled++;
 			callbackFrameIndex = i;
 		});
-		
+
 		loadSpriteSheet();
-		
+
 		Assert.areEqual(1, timesCalled);
 		Assert.areEqual(0, callbackFrameIndex);
 	}
-	
+
+	@Test
 	@:haxe.warning("-WDeprecated")
 	function testOnFrameChangeNoFrameIndexChange():Void
 	{
 		var timesCalled:Int = 0;
-		sprite.animation.callback = function(_, _, _) timesCalled++; // remove later
+		sprite.animation.callback = function(_, _, _) timesCalled++;// remove later
 		sprite.animation.onFrameChange.add(function(_, _, _) timesCalled++);
 
 		sprite.animation.frameIndex = 0;
@@ -98,15 +100,15 @@ class FlxAnimationControllerTest extends FlxTest
 	{
 		loadSpriteSheet();
 		sprite.animation.add("animation", [0, 1, 0], 3000, false);
-
+		
 		var timesCalled = 0;
 		sprite.animation.finishCallback = function(_) timesCalled++;
 		sprite.animation.play("animation");
-
+		
 		step();
 		Assert.areEqual(1, timesCalled);
 	}
-
+	
 	@Test // #1781
 	function testOnFinishOnce():Void
 	{
@@ -114,7 +116,7 @@ class FlxAnimationControllerTest extends FlxTest
 		sprite.animation.add("animation", [0, 1, 0], 3000, false);
 		
 		var timesCalled = 0;
-		sprite.animation.onFinish.add((_) -> timesCalled++);
+		sprite.animation.onFinish.add((_)->timesCalled++);
 		sprite.animation.play("animation");
 		
 		step();
@@ -128,7 +130,7 @@ class FlxAnimationControllerTest extends FlxTest
 		sprite.animation.add("animation", [0], 3000, true);
 		
 		var timesCalled = 0;
-		sprite.animation.onFinish.add((_) -> timesCalled++);
+		sprite.animation.onFinish.add((_)->timesCalled++);
 		sprite.animation.play("animation");
 		
 		step();
@@ -143,7 +145,7 @@ class FlxAnimationControllerTest extends FlxTest
 		sprite.animation.add("animation", [0, 1, 0], 3 * 20 * FlxG.updateFramerate, true);
 		
 		var timesCalled = 0;
-		sprite.animation.onLoop.add((_) -> timesCalled++);
+		sprite.animation.onLoop.add((_)->timesCalled++);
 		sprite.animation.play("animation");
 		
 		step();
@@ -158,7 +160,7 @@ class FlxAnimationControllerTest extends FlxTest
 		sprite.animation.add("animation", [0, 1], 2 * 20 * FlxG.updateFramerate, true);
 		
 		var timesCalled = 0;
-		sprite.animation.onLoop.add(function(_)
+		sprite.animation.onLoop.add(function (_)
 		{
 			timesCalled++;
 			Assert.areEqual(0, sprite.animation.curAnim.curFrame);
@@ -177,7 +179,7 @@ class FlxAnimationControllerTest extends FlxTest
 		sprite.animation.add("animation", [0, 1], 2 * 20 * FlxG.updateFramerate, true);
 		
 		var timesCalled = 0;
-		sprite.animation.onLoop.add(function(_)
+		sprite.animation.onLoop.add(function (_)
 		{
 			timesCalled++;
 			Assert.areEqual(1, sprite.animation.curAnim.curFrame);
@@ -196,13 +198,13 @@ class FlxAnimationControllerTest extends FlxTest
 		sprite.animation.add("animation", [0], 3000, false);
 		
 		var timesCalled = 0;
-		sprite.animation.onLoop.add((_) -> timesCalled++);
+		sprite.animation.onLoop.add((_)->timesCalled++);
 		sprite.animation.play("animation");
 		
 		step();
 		Assert.areEqual(0, timesCalled);
 	}
-
+	
 	@Test // #1786
 	function testNullFrameName():Void
 	{

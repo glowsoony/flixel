@@ -9,18 +9,16 @@ class FlxPointer
 {
 	/** The position in the world */
 	public var x(default, null):Int = 0;
-
 	/** The position in the world */
 	public var y(default, null):Int = 0;
-
+	
 	/** The world position relative to the main camera's scroll position */
 	@:deprecated("screenX is deprecated, use viewX, instead")
 	public var screenX(default, never):Int = 0;
-	
 	/** The world position relative to the main camera's scroll position */
 	@:deprecated("screenY is deprecated, use viewY, instead")
 	public var screenY(default, never):Int = 0;
-
+	
 	/**
 	 * The world position relative to the main camera's scroll position, `cam.viewMarginX` or
 	 * `cam.viewMarginLeft` is the left edge of the camera and `cam.viewMarginRight` is the right
@@ -28,7 +26,6 @@ class FlxPointer
 	 * @since 5.9.0
 	 */
 	public var viewX(default, null):Int = 0;
-	
 	/**
 	 * The world position relative to the main camera's scroll position, `cam.viewMarginY` or
 	 * `cam.viewMarginTop` is the top edge of the camera and `cam.viewMarginBottom` is the bottom
@@ -44,7 +41,6 @@ class FlxPointer
 	 * @since 5.9.0
 	 */
 	public var gameX(default, null):Int = 0;
-	
 	/**
 	 * The position relative to the `FlxGame`'s position in the window,
 	 * where `0` is the top edge of the game and `FlxG.height` is the bottom
@@ -52,7 +48,7 @@ class FlxPointer
 	 * @since 5.9.0
 	 */
 	public var gameY(default, null):Int = 0;
-	
+
 	@:deprecated("_globalScreenX is deprecated, use gameX, instead") // 5.9.0
 	var _globalScreenX(get, set):Int;
 	@:deprecated("_globalScreenY is deprecated, use gameY, instead") // 5.9.0
@@ -82,7 +78,7 @@ class FlxPointer
 		result.addPoint(camera.scroll);
 		return result;
 	}
-
+	
 	/**
 	 * The position relative to the game's position in the window, where `(0, 0)` is the
 	 * top-left edge of the game and `(FlxG.width, FlxG.height)` is the bottom-right
@@ -96,10 +92,10 @@ class FlxPointer
 	{
 		if (result == null)
 			return FlxPoint.get();
-			
+		
 		return result.set(Std.int(_rawX), Std.int(_rawY));
 	}
-
+	
 	/**
 	 * Fetch the world position relative to the main camera's `scroll` position, where
 	 * `(cam.viewMarginLeft, cam.viewMarginTop)` is the top-left of the camera and
@@ -114,15 +110,16 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-			
+		
 		if (result == null)
 			result = FlxPoint.get();
-			
+		
 		result.x = Std.int((gameX - camera.x) / camera.zoom + camera.viewMarginX);
 		result.y = Std.int((gameY - camera.y) / camera.zoom + camera.viewMarginY);
 		
 		return result;
 	}
+	
 	/**
 	 * Fetch the position of the pointer relative to given camera's `scroll` position, where
 	 * `(cam.viewMarginLeft, cam.viewMarginTop)` is the top-left of the camera and
@@ -138,16 +135,16 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-			
+		
 		if (result == null)
 			result = FlxPoint.get();
-
+		
 		result.x = (gameX - camera.x + 0.5 * camera.width * (camera.zoom - camera.initialZoom)) / camera.zoom;
 		result.y = (gameY - camera.y + 0.5 * camera.height * (camera.zoom - camera.initialZoom)) / camera.zoom;
-
+		
 		return result;
 	}
-
+	
 	/**
 	 * Fetch the position of the pointer relative to given camera's `scroll` position, where
 	 * `(cam.viewMarginLeft, cam.viewMarginTop)` is the top-left of the camera and
@@ -164,16 +161,16 @@ class FlxPointer
 	{
 		if (camera == null)
 			camera = FlxG.camera;
-
+		
 		if (result == null)
 			result = FlxPoint.get();
-
+		
 		result.x = (gameX - camera.x) / camera.zoom + camera.viewMarginX;
 		result.y = (gameY - camera.y) / camera.zoom + camera.viewMarginY;
-
+		
 		return result;
 	}
-
+	
 	/**
 	 * Returns a FlxPoint with this input's x and y.
 	 */
@@ -181,10 +178,10 @@ class FlxPointer
 	{
 		if (result == null)
 			return FlxPoint.get(x, y);
-			
+		
 		return result.set(x, y);
 	}
-
+	
 	/**
 	 * Checks to see if this pointer overlaps some `FlxObject` or `FlxGroup`.
 	 *
@@ -209,10 +206,10 @@ class FlxPointer
 		}
 		// check object
 		getWorldPosition(camera, _cachedPoint);
-		final object = cast(objectOrGroup, FlxObject);
+		final object = cast (objectOrGroup, FlxObject);
 		return object.overlapsPoint(_cachedPoint, true, camera);
 	}
-
+	
 	/**
 	 * Directly set the underyling screen position variable. WARNING! You should never use
 	 * this unless you are trying to manually dispatch low-level mouse / touch events to the stage.
@@ -222,8 +219,7 @@ class FlxPointer
 	{
 		setRawPositionUnsafe(newX, newY);
 	}
-
-
+	
 	/**
 	 * Directly set the underyling position variable. WARNING! You should never use
 	 * this unless you are trying to manually dispatch low-level mouse / touch events to the stage.
@@ -237,7 +233,7 @@ class FlxPointer
 		
 		updatePositions();
 	}
-
+	
 	/**
 	 * Helper function to update the cursor used by update() and playback().
 	 * Updates the x, y, screenX, and screenY variables based on the default camera.
@@ -251,11 +247,12 @@ class FlxPointer
 		getViewPosition(FlxG.camera, _cachedPoint);
 		viewX = Std.int(_cachedPoint.x);
 		viewY = Std.int(_cachedPoint.y);
-
+		
 		getWorldPosition(FlxG.camera, _cachedPoint);
 		x = Std.int(_cachedPoint.x);
 		y = Std.int(_cachedPoint.y);
 	}
+	
 	public function toString():String
 	{
 		return FlxStringUtil.getDebugString([LabelValuePair.weak("x", x), LabelValuePair.weak("y", y)]);

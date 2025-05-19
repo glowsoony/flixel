@@ -23,12 +23,13 @@ class InputFrontEnd
 	/**
 	 * Add an input to the system
 	 */
+	@:generic
 	@:deprecated("add is deprecated, use addUniqueType")
 	public inline function add<T:IFlxInputManager>(input:T):T
 	{
 		return addUniqueType(input);
 	}
-
+	
 	/**
 	 * Add an input to the system, unless the same instance was already added
 	 */
@@ -37,7 +38,7 @@ class InputFrontEnd
 	{
 		if (!list.contains(input))
 			list.push(input);
-
+		
 		return input;
 	}
 
@@ -55,7 +56,7 @@ class InputFrontEnd
 				return input;
 			}
 		}
-
+		
 		list.push(input);
 		return input;
 	}
@@ -63,7 +64,7 @@ class InputFrontEnd
 	/**
 	 * Removes an input from the system
 	 *
-	 * @param  Input The input to remove
+	 * @param   Input  The input to remove
 	 * @return  Bool indicating whether it was removed or not
 	 */
 	@:generic
@@ -86,10 +87,10 @@ class InputFrontEnd
 		final index = list.indexOf(oldInput);
 		if (index == -1)
 			return null;
-
+		
 		if (destroyOld)
 			oldInput.destroy();
-
+		
 		list[index] = newInput;
 		return newInput;
 	}

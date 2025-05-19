@@ -2,7 +2,6 @@ package flixel.util;
 
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import haxe.Exception;
-import openfl.errors.Error;
 import openfl.net.SharedObject;
 import openfl.net.SharedObjectFlushStatus;
 
@@ -113,6 +112,19 @@ class FlxSave implements IFlxDestroyable
 	}
 	
 	/**
+	 * The default class resolver of a FlxSave, handles certain Flixel and Openfl classes
+	 */
+	public static inline function resolveFlixelClasses(name:String)
+	{
+		#if flash
+		return Type.resolveClass(name);
+		#else
+		@:privateAccess
+		return SharedObject.__resolveClass(name);
+		#end
+	}
+	
+	/**
 	 * Allows you to directly access the data container in the local shared object.
 	 */
 	public var data(default, null):Dynamic;
@@ -171,7 +183,7 @@ class FlxSave implements IFlxDestroyable
 	 *                        **Note:** This arg is never used when targeting flash
 	 * @return  Whether or not you successfully connected to the save data.
 	 */
-	public function bind(name:String, ?path:String, ?backupParser:(String, Exception) -> Null<Any>):Bool
+	public function bind(name:String, ?path:String, ?backupParser:(String, Exception)->Null<Any>):Bool
 	{
 		destroy();
 		
@@ -211,7 +223,7 @@ class FlxSave implements IFlxDestroyable
 					return false;
 			}
 		}
-		catch (e:Error)
+		catch (e)
 		{
 			FlxG.log.error('Error:${e.message} name:"$name", path:"$path".');
 			destroy();
@@ -308,21 +320,21 @@ class FlxSave implements IFlxDestroyable
 
 		try
 		{
-			var result = _sharedObject.flush(minFileSize);
+			final result = _sharedObject.flush(minFileSize);
 
 			if (result != FLUSHED)
-				status = ERROR("FlxSave is requesting extra storage space.");
+				status = SAVE_ERROR(STORAGE);
 		}
-		catch (e:Error)
+		catch (e)
 		{
-			status = ERROR("There was an problem flushing the save data.");
+			status = SAVE_ERROR(ENCODING(e));
 		}
-
+		
 		checkStatus();
-
+		
 		return isBound;
 	}
-
+	
 	/**
 	 * Erases everything stored in the local shared object.
 	 * Data is immediately erased and the object is saved that way,
@@ -334,7 +346,7 @@ class FlxSave implements IFlxDestroyable
 	{
 		if (!checkStatus())
 			return false;
-
+		
 		_sharedObject.clear();
 		data = {};
 		return true;
@@ -353,8 +365,10 @@ class FlxSave implements IFlxDestroyable
 				return true;
 			case EMPTY:
 				FlxG.log.warn("You must call save.bind() before you can read or write data.");
-			case ERROR(msg):
-				FlxG.log.error(msg);
+			case SAVE_ERROR(STORAGE):
+				FlxG.log.error("FlxSave is requesting extra storage space");
+			case SAVE_ERROR(ENCODING(e)):
+				FlxG.log.error('There was an problem encoding the save data: ${e.message}');
 			case LOAD_ERROR(IO(e)):
 				FlxG.log.error('IO ERROR: ${e.message}');
 			case LOAD_ERROR(INVALID_NAME(name, reason)):
@@ -500,6 +514,9 @@ private class FlxSharedObject extends SharedObject
 			if (~/(?:^|\/)\.\.\//.match(localPath))
 				return FAILURE(INVALID_PATH(localPath, "../ not allowed in localPath"));
 			
+			if (~/(?:^|\/)\.\.\//.match(localPath))
+				return FAILURE(INVALID_PATH(localPath, "../ not allowed in localPath"));
+			
 			try
 			{
 				encodedData = getData(name, localPath);
@@ -522,7 +539,7 @@ private class FlxSharedObject extends SharedObject
 				try
 				{
 					final unserializer = new haxe.Unserializer(encodedData);
-					final resolver = {resolveEnum: Type.resolveEnum, resolveClass: FlxSave.resolveFlixelClasses};
+					final resolver = { resolveEnum: Type.resolveEnum, resolveClass: FlxSave.resolveFlixelClasses };
 					unserializer.setResolver(cast resolver);
 					sharedObject.data = unserializer.unserialize();
 				}
@@ -740,6 +757,14 @@ enum LoadFailureType
 	PARSING(rawData:String, exception:Exception);
 }
 
+enum SaveFailureType
+{
+	/** FlxSave is requesting extra storage space **/
+	STORAGE;
+	
+	/** There was an problem encoding the save data */
+	ENCODING(e:Exception);
+}
 
 enum FlxSaveStatus
 {
@@ -747,15 +772,24 @@ enum FlxSaveStatus
 	 * The initial state, call bind() in order to use.
 	 */
 	EMPTY;
-
+	
 	/**
 	 * The save is set up correctly.
 	 */
 	BOUND(name:String, ?path:String);
-
+	
 	/**
-	 * There was an issue during `flush`
+	 * There was an issue during `flush`. Previously known as `ERROR(msg:String)`
 	 */
+	SAVE_ERROR(type:SaveFailureType);
+	
+	/**
+	 * There was an issue while loading
+	 */
+	LOAD_ERROR(type:LoadFailureType);
+	
+	@:noCompletion
+	@:deprecated("FlxSaveStatus.ERROR is never used, it has been replaced by SAVE_ERROR")
 	ERROR(msg:String);
 	/**
 	 * There was an issue while loading

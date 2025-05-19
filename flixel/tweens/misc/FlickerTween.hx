@@ -4,11 +4,17 @@ import flixel.FlxBasic;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 
+/**
+	 * Seconds to wait until starting this tween, `0` by default.
+ */
 /*Note: FlickerTweenOptions previously referenced TweenOptions, but was causing a "Unsupported recursive type" circular dependency issue when targeting HashLink
  * See https://github.com/HaxeFlixel/flixel/issues/3149
  */
 typedef FlickerTweenOptions =
 {
+	/**
+	 * Tween type - bit field of `FlxTween`'s static type constants.
+	 */
 	@:optional var type:FlxTweenType;
 	
 	/**
@@ -30,28 +36,28 @@ typedef FlickerTweenOptions =
 	 * Optional complete callback function.
 	 */
 	@:optional var onComplete:TweenCallback;
-
-/**
+	
+	/**
 	 * Seconds to wait until starting this tween, `0` by default.
- */
+	 */
 	@:optional var startDelay:Float;
 	
 	/**
 	 * Seconds to wait between loops of this tween, `0` by default.
 	 */
 	@:optional var loopDelay:Float;
-
+	
 	/**
 	 * Whether the object will show after the tween, defaults to `true`
 	 */
 	@:optional var endVisibility:Bool;
-
+	
 	/**
 	 * The amount of time the object will show, compared to the total duration, The default is `0.5`,
 	 * meaning equal times visible and invisible.
 	 */
 	@:optional var ratio:Float;
-
+	
 	/**
 	 * An optional custom flicker function, defaults to
 	 * `function (tween) { return (tween.time / tween.period) % 1 > tween.ratio; }`

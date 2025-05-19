@@ -16,7 +16,7 @@ class FlxArrayUtil
 	{
 		if (newLength > 0 && newLength < array.length)
 			array.resize(newLength);
-
+		
 		return array;
 	}
 

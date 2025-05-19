@@ -83,18 +83,30 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * Distance in pixels the mouse has moved since the last frame in the Y direction.
 	 */
 	public var deltaY(get, never):Int;
-
+	
 	/**
 	 * Distance in pixels the mouse has moved in screen space since the last frame in the X direction.
 	 */
 	@:deprecated("deltaScreenX is deprecated, use deltaViewX, instead") // 5.9.0
 	public var deltaScreenX(get, never):Int;
-
+	
 	/**
 	 * Distance in pixels the mouse has moved in screen space since the last frame in the Y direction.
 	 */
 	@:deprecated("deltaScreenY is deprecated, use deltaViewY, instead") // 5.9.0
 	public var deltaScreenY(get, never):Int;
+	
+	/**
+	 * Distance in pixels the mouse has moved in view space since the last frame in the X direction.
+	 * @since 5.9.0
+	 */
+	public var deltaViewX(get, never):Int;
+
+	/**
+	 * Distance in pixels the mouse has moved in view space since the last frame in the Y direction.
+	 * @since 5.9.0
+	 */
+	public var deltaViewY(get, never):Int;
 
 	/**
 	 * Distance in pixels the mouse has moved in view space since the last frame in the X direction.
@@ -383,16 +395,21 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * @param   cursorData   MouseCursorData contains the bitmap, hotspot etc
 	 * @since   4.2.0
 	 */
-	public function registerSimpleNativeCursorData(name:String, cursorBitmap:BitmapData):MouseCursorData
+	public function registerSimpleNativeCursorData(name:String, cursorBitmap:BitmapData, ?hotSpot:Point):MouseCursorData
 	{
 		var cursorVector = new Vector<BitmapData>();
 		cursorVector[0] = cursorBitmap;
 
 		if (cursorBitmap.width > 32 || cursorBitmap.height > 32)
 			throw "BitmapData files used for native cursors cannot exceed 32x32 pixels due to an OS limitation.";
-
+		
+		if(hotSpot == null)
+			hotSpot = new Point();
+		else if (hotSpot.x < 0 || hotSpot.y < 0 || hotSpot.x > cursorBitmap.width || hotSpot.y > cursorBitmap.height)
+			throw 'Invalid hotSpot: $hotSpot';
+		
 		var cursorData = new MouseCursorData();
-		cursorData.hotSpot = new Point(0, 0);
+		cursorData.hotSpot = hotSpot;
 		cursorData.data = cursorVector;
 
 		registerNativeCursor(name, cursorData);
@@ -615,19 +632,19 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 
 	inline function get_deltaViewX():Int
 		return viewX - _prevViewX;
-		
+	
 	inline function get_deltaViewY():Int
 		return viewY - _prevViewY;
 		
 	inline function get__prevScreenX():Int
 		return _prevViewX;
-		
+	
 	inline function get__prevScreenY():Int
 		return _prevViewY;
-
+		
 	inline function get_deltaScreenX():Int
 		return deltaViewX;
-
+	
 	inline function get_deltaScreenY():Int
 		return deltaViewY;
 
@@ -758,7 +775,8 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	@:allow(flixel.system.replay.FlxReplay)
 	function record():MouseRecord
 	{
-		if ((_lastX == gameX) && (_lastY == gameY)
+		if ((_lastX == gameX)
+			&& (_lastY == gameY)
 			&& (_lastLeftButtonState == _leftButton.current)
 			&& (_lastWheel == wheel))
 		{
@@ -792,12 +810,12 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 
 	inline function get__cursor()
 	{
-	    return cursor;
+		return cursor;
 	}
 	
 	inline function set__cursor(value:Bitmap)
 	{
-	    return cursor = value;
+		return cursor = value;
 	}
 }
 #end

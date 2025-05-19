@@ -18,14 +18,14 @@ class FlxTile extends FlxObject
 	 * This function should take the form myFunction(Tile:FlxTile,Object:FlxObject):void.
 	 * Defaults to null, set through FlxTilemap.setTileProperties().
 	 */
-	public var callbackFunction:(FlxObject, FlxObject) -> Void = null;
+	public var callbackFunction:(FlxObject, FlxObject)->Void = null;
 	
 	/**
 	 * Dispatched whenever FlxG.collide resolves a collision with a tile of this type
 	 * @since 5.9.0
 	 */
-	public var onCollide = new FlxTypedSignal<(FlxTile, FlxObject) -> Void>();
-
+	public var onCollide = new FlxTypedSignal<(FlxTile, FlxObject)->Void>();
+	
 	/**
 	 * Each tile can store its own filter class for their callback functions.
 	 * That is, the callback will only be triggered if an object with a class
@@ -80,7 +80,7 @@ class FlxTile extends FlxObject
 		this.visible = visible;
 		this.allowCollisions = allowCollisions;
 	}
-
+	
 	/**
 	 * Clean up memory.
 	 */
@@ -132,7 +132,7 @@ class FlxTile extends FlxObject
 		last.x = x - (xPos - tilemap.last.x);
 		last.y = y - (yPos - tilemap.last.y);
 	}
-
+	
 	/**
 	 * Places this tile in the world according to the desired map location. 
 	 * often used before calling `overlapsObject`

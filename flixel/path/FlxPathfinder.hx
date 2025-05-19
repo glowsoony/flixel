@@ -119,7 +119,7 @@ class FlxTypedPathfinder<Tilemap:FlxBaseTilemap<FlxObject>, Data:FlxTypedPathfin
 	function getPathPointsFromIndices(data:Data, indices:Array<Int>)
 	{
 		// convert indices to world coordinates
-		return indices.map((i) -> data.map.getTilePos(i, true));
+		return indices.map((i)->data.map.getTilePos(i, true));
 	}
 
 	/**
@@ -128,6 +128,7 @@ class FlxTypedPathfinder<Tilemap:FlxBaseTilemap<FlxObject>, Data:FlxTypedPathfin
 	 * @param data   The pathfinder data for this current search.
 	 * @param points An array of FlxPoint nodes.
 	 */
+	@:haxe.warning("-WDeprecated")
 	function simplifyPath(data:Data, points:Array<FlxPoint>, simplify:FlxPathSimplifier):Array<FlxPoint>
 	{
 		switch(simplify)
@@ -242,6 +243,7 @@ class FlxTypedPathfinder<Tilemap:FlxBaseTilemap<FlxObject>, Data:FlxTypedPathfin
 	 * @param points     An array of FlxPoint nodes.
 	 * @param reolution  Defaults to 1, meaning check every tile or so.  Higher means more checks!
 	 */
+	@:haxe.warning("-WDeprecated")
 	function simplifyRayStep(data:Data, points:Array<FlxPoint>, resolution:Float):Void
 	{
 		// A point used to calculate rays
@@ -617,7 +619,8 @@ class FlxTypedPathfinderData<Tilemap:FlxBaseTilemap<FlxObject>>
 
 	public function hasValidStartEnd()
 	{
-		return map.tileExists(startIndex) && map.tileExists(endIndex);
+		return map.tileExists(startIndex)
+			&& map.tileExists(endIndex);
 	}
 
 	public function destroy()
@@ -687,6 +690,7 @@ enum FlxPathSimplifier
 	 * Removes nodes who'with neighbors that have no walls directly blocking
 	 * Uses `tilemap.rayStep`.
 	 */
+	@:deprecated("RAY_STEP is deprecated, use RAY, instead")
 	RAY_STEP(resolution:Float);
 
 	/**

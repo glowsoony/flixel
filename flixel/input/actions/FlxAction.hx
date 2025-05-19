@@ -342,6 +342,7 @@ class FlxAction implements IFlxDestroyable
 	var _y:Null<Float> = null;
 
 	var _timestamp:Int = 0;
+	@:deprecated("_checked is deprecated, use triggered, instead")
 	var _checked:Bool = false;
 
 	/**
@@ -440,27 +441,27 @@ class FlxAction implements IFlxDestroyable
 		
 		_x = null;
 		_y = null;
-
+		
 		_timestamp = FlxG.game.ticks;
 		triggered = false;
-
+		
 		var i = inputs != null ? inputs.length : 0;
 		while (i-- > 0) // Iterate backwards, since we may remove items
 		{
 			final input = inputs[i];
-
+			
 			if (input.destroyed)
 			{
 				inputs.remove(input);
 				continue;
 			}
-
+			
 			input.update();
-
+			
 			if (input.check(this))
 				triggered = true;
 		}
-
+		
 		return triggered;
 	}
 

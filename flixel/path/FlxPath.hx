@@ -13,9 +13,8 @@ import openfl.display.Graphics;
 typedef CenterMode = FlxPathAnchorMode;
 /**
  * Determines an object position in relation to the path
- *
  */
-@:using(flixel.path.FlxPath.AnchorTools)
+ @:using(flixel.path.FlxPath.AnchorTools)
 enum FlxPathAnchorMode
 {
 	
@@ -55,7 +54,7 @@ private class AnchorTools
 			result = FlxPoint.get();
 		else
 			result.set();
-			
+		
 		return switch (mode)
 		{
 			case ORIGIN:
@@ -72,7 +71,7 @@ private class AnchorTools
 			case TOP_LEFT:
 				result;
 			case CUSTOM(offset):
-				result.addPoint(offset);
+				result.add(offset);
 		}
 	}
 }
@@ -115,41 +114,6 @@ private class AnchorTools
 class FlxPath extends FlxBasePath
 {
 	/**
-	 * Move from the start of the path to the end then stop.
-	 */
-	@:deprecated("Use FORWARD or FlxPathType.FORWARD instead")
-	@:noCompletion
-	public static inline var FORWARD = FlxPathType.FORWARD;
-
-	/**
-	 * Move from the end of the path to the start then stop.
-	 */
-	@:deprecated("Use BACKWARD or FlxPathType.BACKWARD instead")
-	@:noCompletion
-	public static inline var BACKWARD = FlxPathType.BACKWARD;
-
-	/**
-	 * Move from the start of the path to the end then directly back to the start, and start over.
-	 */
-	@:deprecated("Use LOOP_FORWARD or FlxPathType.LOOP_FORWARD instead")
-	@:noCompletion
-	public static inline var LOOP_FORWARD = FlxPathType.LOOP_FORWARD;
-
-	/**
-	 * Move from the end of the path to the start then directly back to the end, and start over.
-	 */
-	@:deprecated("Use LOOP_BACKWARD or FlxPathType.LOOP_BACKWARD instead")
-	@:noCompletion
-	public static inline var LOOP_BACKWARD = FlxPathType.LOOP_BACKWARD;
-
-	/**
-	 * Move from the start of the path to the end then turn around and go back to the start, over and over.
-	 */
-	@:deprecated("Use YOYO or FlxPathType.YOYO instead")
-	@:noCompletion
-	public static inline var YOYO = FlxPathType.YOYO;
-
-	/**
 	 * Path behavior controls: move from the start of the path to the end then stop.
 	 */
 	static var _point:FlxPoint = FlxPoint.get();
@@ -162,33 +126,34 @@ class FlxPath extends FlxBasePath
 	 * to check if this object is currently following a path or not.
 	 */
 	public var speed:Float = 0;
-
+	
 	/**
 	 * Whether to make the object immovable while active.
 	 */
 	public var immovable(default, set):Bool = false;
-
+	
 	/**
 	 * The angle in degrees between this object and the next node, where -90 is directly upward, and 0 is to the right.
 	 */
 	public var angle(default, null):Float = 0;
-
+	
 	/**
 	 * Legacy method of alignment for the object following the path. If true, align the midpoint of the object on the path, else use the x, y position.
 	 */
 	@:deprecated("path.autoCenter is deprecated, use centerMode") // 5.7.0
 	public var autoCenter(get, set):Bool;
-
+	
 	/**
 	 * How to center the object on the path.
+	 * @since 5.7.0
 	 */
 	public var centerMode:FlxPathAnchorMode = CENTER;
-
+	
 	/**
 	 * Whether the object's angle should be adjusted to the path angle during path follow behavior.
 	 */
 	public var autoRotate:Bool = false;
-
+	
 	/**
 	 * The amount of degrees to offset from the path's angle, when `autoRotate` is `true`. To use
 	 * flixel 4.11's autoRotate behavior, set this to `90`, so there is no rotation at 0 degrees.
@@ -197,27 +162,27 @@ class FlxPath extends FlxBasePath
 	 * @since 5.0.0
 	 */
 	public var angleOffset:Float = 0;
-
+	
 	@:deprecated("onComplete is deprecated, use the onEndReached signal, instead")
 	public var onComplete:FlxPath->Void;
-
+	
 	/**
 	 * Tracks which node of the path this object is currently moving toward.
 	 */
 	@:deprecated("nodeIndex is deprecated, use nextIndex, instead")
 	public var nodeIndex(get, never):Int;
-
+	
 	/**
 	 * Whether to limit movement to certain axes.
 	 */
 	public var axes:FlxAxes = XY;
-
+	
 	/**
 	 * Internal tracker for path behavior flags (like looping, yoyo, etc).
 	 */
 	@:noCompletion
 	var _mode(get, set):FlxPathType;
-
+	
 	/**
 	 * Internal helper for node navigation, specifically yo-yo and backwards movement.
 	 */
@@ -233,14 +198,14 @@ class FlxPath extends FlxBasePath
 	 */
 	@:allow(flixel.FlxObject)
 	var object(get, set):FlxObject;
-
+	
 	@:haxe.warning("-WDeprecated")
 	public function new(?nodes:Array<FlxPoint>)
 	{
 		super(nodes != null ? nodes.copy() : []);
 		
 		active = false;
-		onEndReached.add(function(_)
+		onEndReached.add(function (_)
 		{
 			if (onComplete != null)
 				onComplete(this);
@@ -305,7 +270,9 @@ class FlxPath extends FlxBasePath
 				this.nodes = nodes.copy();
 			}
 		}
+		
 		setProperties(speed, mode, autoRotate);
+		
 		if (this.nodes.length > 0)
 		{
 			restart();
@@ -329,7 +296,7 @@ class FlxPath extends FlxBasePath
 	/**
 	 * Change the path node this object is currently at.
 	 *
-	 * @param  nodeIndex    The index of the new node out of path.nodes.
+	 * @param   nodeIndex  The index of the new node out of path.nodes.
 	 */
 	public function setNode(nodeIndex:Int):FlxPath
 	{
@@ -350,17 +317,18 @@ class FlxPath extends FlxBasePath
 		final deltaY = next.y - center.y;
 		center.put();
 		
-		inline function abs(n:Float)
-			return n > 0 ? n : -n;
-			
+		inline function abs(n:Float) return n > 0 ? n : -n;
+
 		if (axes == X)
 		{
 			return abs(deltaX) < speed * elapsed;
 		}
+		
 		if (axes == Y)
 		{
 			return abs(deltaY) < speed * elapsed;
 		}
+		
 		return Math.sqrt(deltaX * deltaX + deltaY * deltaY) < speed * elapsed;
 	}
 	
@@ -384,7 +352,7 @@ class FlxPath extends FlxBasePath
 		// then just move toward the current node at the requested speed
 		if (speed == 0)
 			return;
-			
+		
 		// set velocity based on path mode
 		_point = computeCenter(_point);
 		final node = next;
@@ -431,7 +399,7 @@ class FlxPath extends FlxBasePath
 		}
 		else
 		{
-			var velocity = object.velocity.copyFrom(node).subtractPoint(_point);
+			var velocity = object.velocity.copyFrom(node).subtract(_point);
 			velocity.length = speed;
 			angle = velocity.degrees;
 		}
@@ -445,6 +413,7 @@ class FlxPath extends FlxBasePath
 	function advancePath(snap:Bool = true):FlxPoint
 	{
 		advance();
+		
 		return current;
 	}
 	
@@ -457,7 +426,7 @@ class FlxPath extends FlxBasePath
 			{
 				case ORIGIN:
 					if (object is FlxSprite)
-						object.x -= (cast object : FlxSprite).origin.x;
+						object.x -= (cast object:FlxSprite).origin.x;
 				case CUSTOM(offset):
 					object.x -= offset.x;
 				case CENTER:
@@ -465,7 +434,7 @@ class FlxPath extends FlxBasePath
 				case TOP_LEFT:
 			}
 		}
-
+		
 		if (axes.y)
 		{
 			object.y = next.y;
@@ -473,7 +442,7 @@ class FlxPath extends FlxBasePath
 			{
 				case ORIGIN:
 					if (object is FlxSprite)
-						object.y -= (cast object : FlxSprite).origin.y;
+						object.y -= (cast object:FlxSprite).origin.y;
 				case CUSTOM(offset):
 					object.y -= offset.y;
 				case CENTER:
@@ -481,11 +450,12 @@ class FlxPath extends FlxBasePath
 				case TOP_LEFT:
 			}
 		}
+		
 		super.advance();
 	}
-
+	
 	#if FLX_DEBUG
-
+	
 	/**
 	 * While this doesn't override `FlxBasic.drawDebug()`, the behavior is very similar.
 	 * Based on this path data, it draws a simple lines-and-boxes representation of the path
@@ -499,10 +469,10 @@ class FlxPath extends FlxBasePath
 	{
 		if (nodes == null || nodes.length <= 0 || ignoreDrawDebug)
 			return;
-
+		
 		if (camera == null)
 			camera = FlxG.camera;
-
+		
 		drawDebugOnCamera(camera);
 	}
 	#end
@@ -531,7 +501,7 @@ class FlxPath extends FlxBasePath
 		active = false;
 		if (_wasObjectImmovable != null)
 			object.immovable = _wasObjectImmovable;
-
+		
 		_wasObjectImmovable = null;
 	}
 
@@ -678,7 +648,7 @@ class FlxPath extends FlxBasePath
 		}
 		return null;
 	}
-
+	
 	inline function get_nodeIndex()
 	{
 		return nextIndex;
@@ -719,22 +689,22 @@ class FlxPath extends FlxBasePath
 	{
 		return centerMode.match(CENTER);
 	}
-
+	
 	function get__inc()
 	{
 		return direction.toInt();
 	}
-
+	
 	function set__inc(value:Int):Int
 	{
 		direction = value < 0 ? FlxPathDirection.BACKWARD : FlxPathDirection.FORWARD;
 		return value;
 	}
-
+	
 	function get__mode()
 	{
 		final isForward = direction == FlxPathDirection.FORWARD;
-		return switch (loopType)
+		return switch(loopType)
 		{
 			case FlxPathLoopType.ONCE:
 				isForward ? FlxPathType.FORWARD : FlxPathType.BACKWARD;
@@ -744,7 +714,7 @@ class FlxPath extends FlxBasePath
 				FlxPathType.YOYO;
 		}
 	}
-
+	
 	function set__mode(value:FlxPathType):FlxPathType
 	{
 		loopType = switch (value)
@@ -756,6 +726,7 @@ class FlxPath extends FlxBasePath
 			case FlxPathType.LOOP_FORWARD | FlxPathType.LOOP_BACKWARD:
 				FlxPathLoopType.LOOP;
 		}
+		
 		direction = switch (value)
 		{
 			case FlxPathType.YOYO:
@@ -765,15 +736,15 @@ class FlxPath extends FlxBasePath
 			case FlxPathType.BACKWARD | FlxPathType.LOOP_BACKWARD:
 				FlxPathDirection.BACKWARD;
 		}
-
+		
 		return value;
 	}
-
+	
 	function get_object()
 	{
 		return target;
 	}
-
+	
 	function set_object(value:FlxObject)
 	{
 		return target = value;

@@ -57,13 +57,13 @@ class FlxSpriteTest extends FlxTest
 		var color = FlxColor.RED;
 		var colorSprite = new FlxSprite();
 		colorSprite.makeGraphic(100, 100, color);
-		Assert.areEqual(color.to24Bit(), colorSprite.pixels.getPixel(0, 0));
-		Assert.areEqual(color.to24Bit(), colorSprite.pixels.getPixel(90, 90));
+		Assert.areEqual(color.rgb, colorSprite.pixels.getPixel(0, 0));
+		Assert.areEqual(color.rgb, colorSprite.pixels.getPixel(90, 90));
 
 		color = FlxColor.GREEN;
 		colorSprite = new FlxSprite();
 		colorSprite.makeGraphic(120, 120, color);
-		Assert.areEqual(color.to24Bit(), colorSprite.pixels.getPixel(119, 119));
+		Assert.areEqual(color.rgb, colorSprite.pixels.getPixel(119, 119));
 	}
 
 	@Test
@@ -329,7 +329,7 @@ class FlxSpriteTest extends FlxTest
 		
 		expected.put();
 	}
-
+	
 	@Test
 	function testGetGraphicMidpoint()
 	{
@@ -344,7 +344,7 @@ class FlxSpriteTest extends FlxTest
 		assertGraphicMidpoint({ pos:[0, 5], size:[50, 50], origin:full, offset:[50, 60]});
 		assertGraphicMidpoint({ pos:[0, 5], size:[50, 100], origin:[10, 20], offset:[-50, 60]});
 	}
-
+	
 	function assertGraphicMidpoint(orientation:Orientation, ?pos:PosInfos)
 	{
 		sprite1.x = orientation.pos.x;
@@ -353,7 +353,7 @@ class FlxSpriteTest extends FlxTest
 		sprite1.offset.set(orientation.offset.x, orientation.offset.y);
 		sprite1.origin.set(orientation.origin.x, orientation.origin.y);
 		final actual = sprite1.getGraphicMidpoint(FlxPoint.weak());
-
+		
 		// check against getScreenBounds
 		final rect = sprite1.getScreenBounds(FlxRect.weak());
 		FlxAssert.areNear(rect.x + 0.5 * rect.width, actual.x, 0.001, pos);
@@ -365,7 +365,7 @@ abstract SimplePoint(Array<Float>) from Array<Float>
 {
 	public var x(get, never):Float;
 	inline function get_x() return this[0];
-
+	
 	public var y(get, never):Float;
 	inline function get_y() return this[1];
 } 
