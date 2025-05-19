@@ -11,7 +11,6 @@ import flixel.addons.system.macros.FlxAddonDefines;
 #end
 
 
-
 private enum UserDefines
 {
 	FLX_NO_MOUSE_ADVANCED;
@@ -355,4 +354,3 @@ class FlxDefines
 		Context.fatalError(message, pos);
 	}
 }
-#end
