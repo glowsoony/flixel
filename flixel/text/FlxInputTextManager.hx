@@ -388,7 +388,6 @@ enum TypingCommand
 	 * Copies the current selection into the clipboard.
 	 */
 	COPY;
-	 */
 	/**
 	 * Pastes the clipboard's text into the field.
 	 */
