@@ -97,7 +97,7 @@ class FlxSave implements IFlxDestroyable
 		#end
 		return newStr;
 	}
-
+	
 	/**
 	 * The default class resolver of a FlxSave, handles certain Flixel and Openfl classes
 	 */
@@ -110,7 +110,7 @@ class FlxSave implements IFlxDestroyable
 		return SharedObject.__resolveClass(name);
 		#end
 	}
-
+	
 	/**
 	 * Allows you to directly access the data container in the local shared object.
 	 */
@@ -498,8 +498,6 @@ private class FlxSharedObject extends SharedObject
 		if (!all.exists(id))
 		{
 			var encodedData = null;
-			if (~/(?:^|\/)\.\.\//.match(localPath))
-				return FAILURE(INVALID_PATH(localPath, "../ not allowed in localPath"));
 			
 			if (~/(?:^|\/)\.\.\//.match(localPath))
 				return FAILURE(INVALID_PATH(localPath, "../ not allowed in localPath"));

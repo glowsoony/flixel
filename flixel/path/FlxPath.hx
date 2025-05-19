@@ -674,7 +674,6 @@ class FlxPath extends FlxBasePath
 	}
 	
 	// deprecated 5.7.0
-	
 	@:noCompletion
 	function set_autoCenter(value:Bool):Bool
 	{
@@ -683,7 +682,6 @@ class FlxPath extends FlxBasePath
 	}
 	
 	// deprecated 5.7.0
-	
 	@:noCompletion
 	function get_autoCenter():Bool
 	{

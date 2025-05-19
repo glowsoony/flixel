@@ -405,6 +405,7 @@ enum TypingCommand
 	 * Copies the current selection into the clipboard.
 	 */
 	COPY;
+
 	/**
 	 * Copies the current selection into the clipboard and then removes it
 	 * from the text field.

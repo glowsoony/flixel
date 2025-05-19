@@ -443,7 +443,7 @@ class FlxRect implements IFlxPooled
 		
 		if (newRect == null)
 			newRect = FlxRect.get();
-
+		
 		degrees = degrees % 360;
 		if (degrees == 0)
 		{
@@ -560,7 +560,7 @@ class FlxRect implements IFlxPooled
 		
 		return point.set(x + 0.5 * width, y + 0.5 * height);
 	}
-
+	
 	/**
 	 * Convert object to readable string name. Useful for debugging, save games, etc.
 	 */

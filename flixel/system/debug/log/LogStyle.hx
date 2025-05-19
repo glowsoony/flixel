@@ -52,13 +52,6 @@ class LogStyle
 	public final onLog = new FlxTypedSignal<(data:Any, ?pos:PosInfos) -> Void>();
 	
 	/**
-	 * A callback function that is called when this LogStyle is used
-	 * **Note:** Unlike the deprecated `callbackFunction`, this is called every time,
-	 * even when logged with `once = true` and even in release mode.
-	 */
-	public final onLog = new FlxTypedSignal<(data:Any) -> Void>();
-
-	/**
 	 * Whether an exception is thrown when this LogStyle is used.
 	 * **Note**: Unlike other log style properties, this happens even in release mode.
 	 * @since 5.4.0

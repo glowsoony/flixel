@@ -134,55 +134,6 @@ class FlxTilemapTest extends FlxTest
 	}
 	
 	@Test
-	function testAutoTiling()
-	{
-		final mapData = [
-			0, 0, 1, 0, 0,
-			0, 0, 1, 0, 0,
-			0, 1, 1, 1, 1,
-			0, 0, 0, 0, 0
-		];
-		tilemap.loadMapFromArray(mapData, 5, 3, getBitmapData(), 8, 8, AUTO);
-		
-		Assert.areEqual(5, tilemap.widthInTiles);
-		Assert.areEqual(3, tilemap.heightInTiles);
-		
-		assertSolidData(mapData);
-		assertData([
-			0, 0,  6,  0,  0,
-			0, 0,  6,  0,  0,
-			0, 3, 12, 11, 11,
-			0, 0,  0,  0,  0
-		]);
-		
-		tilemap.setTileIndex(2, 0);
-		
-		assertSolidData([
-			0, 0, 0, 0, 0,
-			0, 0, 1, 0, 0,
-			0, 1, 1, 1, 1,
-			0, 0, 0, 0, 0
-		]);
-		
-		assertData([
-			0, 0,  0,  0,  0,
-			0, 0,  5,  0,  0,
-			0, 3, 12, 11, 11,
-			0, 0,  0,  0,  0
-		]);
-	}
-	
-	function assertSolidData(expected:Array<Int>, ?msg:String, ?info:PosInfos)
-	{
-		FlxAssert.arraysEqual(expected, tilemap.getData(true), msg, info);
-	}
-	
-	function assertData(expected:Array<Int>, ?msg:String, ?info:PosInfos)
-	{
-		FlxAssert.arraysEqual(expected, tilemap.getData(false), msg, info);
-	}
-
-	@Test
 	function testLoadMapFromGraphic()
 	{
 		var map = new BitmapData(2, 2);
@@ -228,19 +179,6 @@ class FlxTilemapTest extends FlxTest
 		Assert.isFalse(tilemap.overlapsWithCallback(sprite));
 	}
 	
-	@Test // #1546
-	// same as testOffMapOverlap but with objectOverlapsTiles
-	function testOffMapOverlap2()
-	{
-		tilemap.loadMapFrom2DArray([[1], [0]], getBitmapData(), 8, 8);
-		final obj = new FlxObject(-10, 10, 8, 8);
-		Assert.isFalse(tilemap.objectOverlapsTiles(obj));
-		
-		obj.x = 8;
-		obj.y = 8;
-		Assert.isFalse(tilemap.objectOverlapsTiles(obj));
-	}
-
 	@Test // #1546
 	// same as testOffMapOverlap but with objectOverlapsTiles
 	function testOffMapOverlap2()

@@ -815,7 +815,7 @@ class FlxSprite extends FlxObject
 		
 		if (dirty) // rarely
 			calcFrame(useFramePixels);
-
+		
 		for (camera in getCamerasLegacy())
 		{
 			if (!camera.visible || !camera.exists || !isOnScreen(camera))
@@ -897,7 +897,7 @@ class FlxSprite extends FlxObject
 			matrix.tx = Math.floor(matrix.tx);
 			matrix.ty = Math.floor(matrix.ty);
 		}
-
+		
 		//Borrowed form CNE (CodenameEngine)
         matrixAddition(_matrix, camera);
 		

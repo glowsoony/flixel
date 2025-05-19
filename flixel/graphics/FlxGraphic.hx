@@ -364,7 +364,7 @@ class FlxGraphic implements IFlxDestroyable
 	 * It is `false` by default, since it significantly increases memory consumption.
 	 */
 	public var unique:Bool = false;
-
+	
 	#if FLX_TRACK_GRAPHICS
 	/**
 	 * **Debug only**
@@ -607,6 +607,7 @@ class FlxGraphic implements IFlxDestroyable
 			bitmap = value;
 			width = bitmap.width;
 			height = bitmap.height;
+
 			#if FLX_OPENGL_AVAILABLE
 			var max:Int = FlxG.bitmap.maxTextureSize;
 			if (max > 0)

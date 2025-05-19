@@ -109,18 +109,6 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	public var deltaViewY(get, never):Int;
 
 	/**
-	 * Distance in pixels the mouse has moved in view space since the last frame in the X direction.
-	 * @since 5.9.0
-	 */
-	public var deltaViewX(get, never):Int;
-	
-	/**
-	 * Distance in pixels the mouse has moved in view space since the last frame in the Y direction.
-	 * @since 5.9.0
-	 */
-	public var deltaViewY(get, never):Int;
-
-	/**
 	 * Check to see if the left mouse button is currently pressed.
 	 */
 	public var pressed(get, never):Bool;

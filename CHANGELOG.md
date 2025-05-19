@@ -657,7 +657,7 @@ The alpha was causing issues with CI due to haxelib issues. We're foregoing the 
 - `FlxKeyManager`: fixed `anyPressed([ANY])` not working ([#2253](https://github.com/HaxeFlixel/flixel/pull/2253))
 
 #### Changes and improvements:
-- Fixed `Std.isOfType)` deprecation warnings with Haxe 4.2
+- Fixed `Std.is()` deprecation warnings with Haxe 4.2
 
 ## 4.7.0 (April 12, 2020)
 

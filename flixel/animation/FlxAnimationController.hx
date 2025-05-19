@@ -700,6 +700,7 @@ class FlxAnimationController implements IFlxDestroyable
 		}
 		frameIndex = FlxG.random.int(0, numFrames - 1);
 	}
+
 	@:haxe.warning("-WDeprecated")
 	function fireCallback():Void
 	{

@@ -12,6 +12,7 @@ import flixel.system.ui.FlxSoundTray;
 import flixel.text.FlxInputText;
 import flixel.util.FlxSignal;
 import openfl.media.Sound;
+
 /**
  * Accessed via `FlxG.sound`.
  */

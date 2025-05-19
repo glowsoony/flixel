@@ -76,7 +76,6 @@ class LogFrontEnd
 				style.callbackFunction();
 		}
 		#end
-		style.onLog.dispatch(data);
 		
 		style.onLog.dispatch(data, pos);
 		

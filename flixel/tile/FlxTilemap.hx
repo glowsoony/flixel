@@ -927,7 +927,6 @@ class FlxTypedTilemap<Tile:FlxTile> extends FlxBaseTilemap<Tile>
 		final startIndex = getMapIndex(start);
 		final endIndex = getMapIndex(end);
 
-		final tile = getTileData(startIndex);
 		// If the starting tile is solid, return the starting position
 		final tile = getTileData(startIndex);
 		if (tile != null && tile.solid)

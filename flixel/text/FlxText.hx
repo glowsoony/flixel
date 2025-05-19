@@ -161,7 +161,7 @@ class FlxText extends FlxSprite
 	 * Internal handler for deprecated `shadowOffset` field
 	 */
 	var _shadowOffset:FlxPoint = FlxPoint.get(1, 1);
-
+	
 	/**
 	 * Offset that is applied to the shadow border style, if active.
 	 * `x` and `y` are multiplied by `borderSize`. Default is `(1, 1)`, or lower-right corner.
@@ -1362,7 +1362,7 @@ enum FlxTextBorderStyle
 	 * **Note:** Ignores borderSize
 	 */
 	SHADOW_XY(offsetX:Float, offsetY:Float);
-
+	
 	/**
 	 * Outline on all 8 sides
 	 */

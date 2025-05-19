@@ -5,7 +5,8 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 
 /**
-	 * Seconds to wait until starting this tween, `0` by default.
+ * Special tween options for flicker tweens
+ * @since 5.7.0
  */
 /*Note: FlickerTweenOptions previously referenced TweenOptions, but was causing a "Unsupported recursive type" circular dependency issue when targeting HashLink
  * See https://github.com/HaxeFlixel/flixel/issues/3149

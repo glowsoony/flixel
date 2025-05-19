@@ -574,8 +574,8 @@ class FlxCamera extends FlxBasic
 
 	static var renderRect:FlxRect = FlxRect.get();
 
-	// Both shader functions borrowed from CNE (CodenameEngine).
-	
+	/** <-- Both shader functions borrowed from CNE (CodenameEngine). --> */
+
 	/**
 	 * Adds a FlxShader as a filter to the camera
 	 * @param shader Shader to add
@@ -1185,7 +1185,14 @@ class FlxCamera extends FlxBasic
 
 		updateFlashSpritePosition();
 		updateShake(elapsed);
+		updateShaderFilterSizes();
+	}
 
+	/**
+	 * Updates shaderFilters sizes if they are FlxGraphicShader.
+	 */
+	public function updateShaderFilterSizes()
+	{
 		if (filtersEnabled && flashSprite.filters != null)
 		{
 			// var rect = _scrollRect.scrollRect;

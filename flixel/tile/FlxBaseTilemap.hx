@@ -1135,7 +1135,7 @@ class FlxBaseTilemap<Tile:FlxObject> extends FlxObject
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Check the value of a particular tile.
 	 *

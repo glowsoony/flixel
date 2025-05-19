@@ -102,6 +102,7 @@ class FlxArrayUtilTest
 		Assert.isTrue([0, 1, 2, 3, 4, 5].safeSwap(0, 2).equals([2, 1, 0, 3, 4, 5]));
 		Assert.isTrue([0, 1, 2, 3, 4, 5].safeSwap(1, 6).equals([0, 1, 2, 3, 4, 5]));
 	}
+
 	@Test
 	@:haxe.warning("-WDeprecated")
 	function testSetLength()

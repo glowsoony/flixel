@@ -675,17 +675,6 @@ class Interaction extends Window
 	{
 		addItemsWithinArea(cast items, members, area);
 	}
-
-	inline function isOverObject(object:FlxObject, area:FlxRect):Bool
-	{
-		return area.overlaps(object.getHitbox(FlxRect.weak()));
-	}
-	
-	inline function isOverSprite(sprite:FlxSprite, area:FlxRect):Bool
-	{
-		// Ignore sprites' alpha when clicking a point
-		return (area.width <= 1 && area.height <= 1) ? sprite.pixelsOverlapPoint(flixelPointer, 0xEE) : isOverObject(sprite, area);
-	}
 	
 	function isOverObject(object:FlxObject, area:FlxRect):Bool
 	{

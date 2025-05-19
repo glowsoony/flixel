@@ -408,7 +408,7 @@ class FlxObject extends FlxBasic
 		// Since we are not separating, always return any amount of overlap => false as last parameter
 		return computeOverlapY(object1, object2, false) != 0;
 	}
-
+	
 	/**
 	 * Internal function that computes overlap among two objects on the X axis. It also updates the `touching` variable.
 	 * `checkMaxOverlap` is used to determine whether we want to exclude (therefore check) overlaps which are
