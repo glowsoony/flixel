@@ -408,293 +408,6 @@ class FlxObject extends FlxBasic
 		// Since we are not separating, always return any amount of overlap => false as last parameter
 		return computeOverlapY(object1, object2, false) != 0;
 	}
-	
-	/**
-	 * Internal elper that determines whether either object is a tilemap, determines
-	 * which tiles are overlapping and calls the appropriate separator
-	 * 
-	 * 
-	 * 
-	 * @param   func         The process you wish to call with both objects, or between tiles,
-	 *                       
-	 * @param   isCollision  Does nothing, if both objects are immovable
-	 * @return  The result of whichever separator was used
-	 * @since 5.9.0
-	 */
-	@:haxe.warning("-WDeprecated")
-	static function processCheckTilemap(object1:FlxObject, object2:FlxObject, func:(FlxObject, FlxObject) -> Bool, ?position:FlxPoint, isCollision = true):Bool
-	{
-		// two immovable objects cannot collide
-		if (isCollision && object1.immovable && object2.immovable)
-			return false;
-
-		// If one of the objects is a tilemap, just pass it off.
-		if (object1.flixelType == TILEMAP)
-		{
-			final tilemap:FlxBaseTilemap<Dynamic> = cast object1;
-			// If object1 is a tilemap, check it's tiles against object2, which may also be a tilemap
-			function recurseProcess(tile, _)
-			{
-				// Keep tile as first arg
-				return processCheckTilemap(tile, object2, func, position, isCollision);
-			}
-			return tilemap.overlapsWithCallback(object2, recurseProcess, false, position);
-		}
-		else if (object2.flixelType == TILEMAP)
-		{
-			final tilemap:FlxBaseTilemap<Dynamic> = cast object2;
-			// If object1 is a tilemap, check it's tiles against object2, which may also be a tilemap
-			function recurseProcess(tile, _)
-			{
-				// Keep tile as second arg
-				return processCheckTilemap(object1, tile, func, position, isCollision);
-			}
-			return tilemap.overlapsWithCallback(object1, recurseProcess, false, position);
-		}
-		return func(object1, object2);
-	}
-	/**
-	 * Separates 2 overlapping objects. If an object is a tilemap,
-	 * it will separate it from any tiles that overlap it.
-	 * 
-	 * @return  Whether the objects were overlapping and were separated
-	 */
-	public static function separate(object1:FlxObject, object2:FlxObject):Bool
-	{
-		final separatedX = separateX(object1, object2);
-		final separatedY = separateY(object1, object2);
-		return separatedX || separatedY;
-		
-		/*
-		 * Note: can't do the following, FlxTilemapExt works better when you separate all
-		 * tiles in the x and then all tiles the y, rather than iterating all overlapping
-		 * tiles and separating the x and y on each of them. If we find a way around this
-		 * if would be more efficient to do the following
-		 */
-		// function helper(object1, object2)
-		// {
-		// 	final separatedX = separateXHelper(object1, object2);
-		// 	final separatedY = separateYHelper(object1, object2);
-		// 	return separatedX || separatedY;
-		// }
-		// return processCheckTilemap(object1, object2, helper);
-	}
-
-	/**
-	 * Separates 2 overlapping objects along the X-axis. if an object is a tilemap,
-	 * it will separate it from any tiles that overlap it.
-	 * 
-	 * @return  Whether the objects were overlapping and were separated along the X-axis
-	 */
-	public static function separateX(object1:FlxObject, object2:FlxObject):Bool
-	{
-		return processCheckTilemap(object1, object2, separateXHelper);
-	}
-
-	/**
-	 * Separates 2 overlapping objects along the Y-axis. if an object is a tilemap,
-	 * it will separate it from any tiles that overlap it.
-	 * 
-	 * @return  Whether the objects were overlapping and were separated along the Y-axis
-	 */
-	public static function separateY(object1:FlxObject, object2:FlxObject):Bool
-	{
-		return processCheckTilemap(object1, object2, separateYHelper);
-	}
-	/**
-	 * Same as `separateX` but assumes both are not immovable and not tilemaps
-	 */
-	static function separateXHelper(object1:FlxObject, object2:FlxObject):Bool
-	{
-		final overlap:Float = computeOverlapX(object1, object2);
-		// Then adjust their positions and velocities accordingly (if there was any overlap)
-		if (overlap != 0)
-		{
-			final delta1 = object1.x - object1.last.x;
-			final delta2 = object2.x - object2.last.x;
-			final vel1 = object1.velocity.x;
-			final vel2 = object2.velocity.x;
-
-			if (!object1.immovable && !object2.immovable)
-			{
-				#if FLX_4_LEGACY_COLLISION
-				legacySeparateX(object1, object2, overlap);
-				#else
-				object1.x -= overlap * 0.5;
-				object2.x += overlap * 0.5;
-				final mass1 = object1.mass;
-				final mass2 = object2.mass;
-				final momentum = mass1 * vel1 + mass2 * vel2;
-				object1.velocity.x = (momentum + object1.elasticity * mass2 * (vel2 - vel1)) / (mass1 + mass2);
-				object2.velocity.x = (momentum + object2.elasticity * mass1 * (vel1 - vel2)) / (mass1 + mass2);
-				#end
-			}
-			else if (!object1.immovable)
-			{
-				object1.x -= overlap;
-				object1.velocity.x = vel2 - vel1 * object1.elasticity;
-			}
-			else if (!object2.immovable)
-			{
-				object2.x += overlap;
-				object2.velocity.x = vel1 - vel2 * object2.elasticity;
-			}
-
-			// use collisionDrag properties to determine whether one object
-			if (allowCollisionDrag(object1.collisionYDrag, object1, object2) && delta1 > delta2)
-				object1.y += object2.y - object2.last.y;
-			else if (allowCollisionDrag(object2.collisionYDrag, object2, object1) && delta2 > delta1)
-				object2.y += object1.y - object1.last.y;
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Same as `separateY` but assumes both are not immovable and not tilemaps
-	 */
-	static function separateYHelper(object1:FlxObject, object2:FlxObject):Bool
-	{
-		final overlap:Float = computeOverlapY(object1, object2);
-		// Then adjust their positions and velocities accordingly (if there was any overlap)
-		if (overlap != 0)
-		{
-			final delta1 = object1.y - object1.last.y;
-			final delta2 = object2.y - object2.last.y;
-			final vel1 = object1.velocity.y;
-			final vel2 = object2.velocity.y;
-			
-			if (!object1.immovable && !object2.immovable)
-			{
-				#if FLX_4_LEGACY_COLLISION
-				legacySeparateY(object1, object2, overlap);
-				#else
-				object1.y -= overlap / 2;
-				object2.y += overlap / 2;
-				
-				final mass1 = object1.mass;
-				final mass2 = object2.mass;
-				final momentum = mass1 * vel1 + mass2 * vel2;
-				final newVel1 = (momentum + object1.elasticity * mass2 * (vel2 - vel1)) / (mass1 + mass2);
-				final newVel2 = (momentum + object2.elasticity * mass1 * (vel1 - vel2)) / (mass1 + mass2);
-				object1.velocity.y = newVel1;
-				object2.velocity.y = newVel2;
-				#end
-			}
-			else if (!object1.immovable)
-			{
-				object1.y -= overlap;
-				object1.velocity.y = vel2 - vel1 * object1.elasticity;
-			}
-			else if (!object2.immovable)
-			{
-				object2.y += overlap;
-				object2.velocity.y = vel1 - vel2 * object2.elasticity;
-			}
-			
-			// use collisionDrag properties to determine whether one object
-			if (allowCollisionDrag(object1.collisionXDrag, object1, object2) && delta1 > delta2)
-				object1.x += object2.x - object2.last.x;
-			else if (allowCollisionDrag(object2.collisionXDrag, object2, object1) && delta2 > delta1)
-				object2.x += object1.x - object1.last.x;
-				
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * The separateX that existed before HaxeFlixel 5.0, preserved for anyone who
-	 * needs to use it in an old project. Does not preserve momentum, avoid if possible
-	 */
-	static inline function legacySeparateX(object1:FlxObject, object2:FlxObject, overlap:Float)
-	{
-		final vel1 = object1.velocity.x;
-		final vel2 = object2.velocity.x;
-		final mass1 = object1.mass;
-		final mass2 = object2.mass;
-		object1.x = object1.x - (overlap * 0.5);
-		object2.x += overlap * 0.5;
-		
-		var newVel1 = Math.sqrt((vel2 * vel2 * mass2) / mass1) * ((vel2 > 0) ? 1 : -1);
-		var newVel2 = Math.sqrt((vel1 * vel1 * mass1) / mass2) * ((vel1 > 0) ? 1 : -1);
-		final average = (newVel1 + newVel2) * 0.5;
-		newVel1 -= average;
-		newVel2 -= average;
-		object1.velocity.x = average + (newVel1 * object1.elasticity);
-		object2.velocity.x = average + (newVel2 * object2.elasticity);
-	}
-	
-	/**
-	 * The separateY that existed before HaxeFlixel 5.0, preserved for anyone who
-	 * needs to use it in an old project. Does not preserve momentum, avoid if possible
-	 */
-	static inline function legacySeparateY(object1:FlxObject, object2:FlxObject, overlap:Float)
-	{
-		final vel1 = object1.velocity.y;
-		final vel2 = object2.velocity.y;
-		final mass1 = object1.mass;
-		final mass2 = object2.mass;
-		object1.y = object1.y - (overlap * 0.5);
-		object2.y += overlap * 0.5;
-		
-		var newVel1 = Math.sqrt((vel2 * vel2 * mass2) / mass1) * ((vel2 > 0) ? 1 : -1);
-		var newVel2 = Math.sqrt((vel1 * vel1 * mass1) / mass2) * ((vel1 > 0) ? 1 : -1);
-		final average = (newVel1 + newVel2) * 0.5;
-		newVel1 -= average;
-		newVel2 -= average;
-		object1.velocity.y = average + (newVel1 * object1.elasticity);
-		object2.velocity.y = average + (newVel2 * object2.elasticity);
-	}
-	
-	/**
-	 * Checks two objects for overlaps and sets their touching flags, accordingly.
-	 * If either object may be a tilemap, this will check the object against individual tiles
-	 * 
-	 * @return  Whether the objects in fact touched
-	 */
-	public static function updateTouchingFlags(object1:FlxObject, object2:FlxObject):Bool
-	{
-		function helper(object1:FlxObject, object2:FlxObject):Bool
-		{
-			final touchingX:Bool = updateTouchingFlagsXHelper(object1, object2);
-			final touchingY:Bool = updateTouchingFlagsYHelper(object1, object2);
-			return touchingX || touchingY;
-		}
-		return processCheckTilemap(object1, object2, helper, false);
-	}
-	
-	/**
-	 * Checks two objects for overlaps in the X-axis and sets their touching flags, accordingly.
-	 * If either object may be a tilemap, this will check the object against individual tiles
-	 * 
-	 * @return  Whether the objects are overlapping in the X-axis
-	 */
-	public static function updateTouchingFlagsX(object1:FlxObject, object2:FlxObject):Bool
-	{
-		return processCheckTilemap(object1, object2, updateTouchingFlagsXHelper, false);
-	}
-	
-	static function updateTouchingFlagsXHelper(object1:FlxObject, object2:FlxObject):Bool
-	{
-		// Since we are not separating, always return any amount of overlap => false as last parameter
-		return computeOverlapX(object1, object2, false) != 0;
-	}
-	/**
-	 * Checks two objects for overlaps in the Y-axis and sets their touching flags, accordingly.
-	 * If either object may be a tilemap, this will check the object against individual tiles
-	 *
-	 * @return  Whether the objects are overlapping in the Y-axis
-	 */
-	public static function updateTouchingFlagsY(object1:FlxObject, object2:FlxObject):Bool
-	{
-		return processCheckTilemap(object1, object2, updateTouchingFlagsYHelper, false);
-	}
-	static function updateTouchingFlagsYHelper(object1:FlxObject, object2:FlxObject):Bool
-	{
-		// Since we are not separating, always return any amount of overlap => false as last parameter
-		return computeOverlapY(object1, object2, false) != 0;
-	}
 
 	/**
 	 * Internal function that computes overlap among two objects on the X axis. It also updates the `touching` variable.
@@ -707,11 +420,13 @@ class FlxObject extends FlxBasic
 		// First, get the two object deltas
 		final delta1:Float = object1.x - object1.last.x;
 		final delta2:Float = object2.x - object2.last.x;
+
 		if (delta1 != delta2)
 		{
 			// Check if the X hulls actually overlap
 			final delta1Abs:Float = (delta1 > 0) ? delta1 : -delta1;
 			final delta2Abs:Float = (delta2 > 0) ? delta2 : -delta2;
+
 			final rect1 = FlxRect.get(object1.x - (delta1 > 0 ? delta1 : 0), object1.last.y, object1.width + delta1Abs, object1.height);
 			final rect2 = FlxRect.get(object2.x - (delta2 > 0 ? delta2 : 0), object2.last.y, object2.width + delta2Abs, object2.height);
 			
@@ -843,11 +558,6 @@ class FlxObject extends FlxBasic
 	 * Y position of the upper left corner of this object in world space.
 	 */
 	public var y(default, set):Float = 0;
-
-	/**
-	 * Z position of the upper left corner of this object in world space.
-	 */
-	public var z(default, set):Float = 0;
 
 	/**
 	 * The width of this object's hitbox. For sprites, use `offset` to control the hitbox position.
@@ -1519,8 +1229,6 @@ class FlxObject extends FlxBasic
 	{
 		if (ignoreDrawDebug)
 			return;
-
-		final drawPath = path != null && !path.ignoreDrawDebug;
 		
 		final drawPath = path != null && !path.ignoreDrawDebug;
 		
@@ -1660,12 +1368,6 @@ class FlxObject extends FlxBasic
 	function set_y(value:Float):Float
 	{
 		return y = value;
-	}
-
-	@:noCompletion
-	function set_z(value:Float):Float
-	{
-		return z = value;
 	}
 
 	@:noCompletion
