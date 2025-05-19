@@ -161,11 +161,6 @@ class FlxText extends FlxSprite
 	 * Internal handler for deprecated `shadowOffset` field
 	 */
 	var _shadowOffset:FlxPoint = FlxPoint.get(1, 1);
-	
-	/**
-	 * Internal handler for deprecated `shadowOffset` field
-	 */
-	var _shadowOffset:FlxPoint = FlxPoint.get(1, 1);
 
 	/**
 	 * Offset that is applied to the shadow border style, if active.
@@ -865,11 +860,6 @@ class FlxText extends FlxSprite
 		return _shadowOffset;
 	}
 
-	inline function get_shadowOffset()
-	{
-		return _shadowOffset;
-	}
-
 	override function updateColorTransform():Void
 	{
 		colorTransform.alphaMultiplier = alpha;
@@ -1060,45 +1050,6 @@ class FlxText extends FlxSprite
 		
 		// same as super but checks _graphicOffset
 		getScreenPosition(_point, camera).subtract(offset).subtract(_graphicOffset);
-		_point.add(origin.x, origin.y);
-		_matrix.translate(_point.x, _point.y);
-		
-		if (isPixelPerfectRender(camera))
-		{
-			_matrix.tx = Math.floor(_matrix.tx);
-			_matrix.ty = Math.floor(_matrix.ty);
-		}
-		
-		camera.drawPixels(_frame, framePixels, _matrix, colorTransform, blend, antialiasing, shader);
-	}
-
-	override function drawSimple(camera:FlxCamera):Void
-	{
-		// same as super but checks _graphicOffset
-		getScreenPosition(_point, camera).subtractPoint(offset).subtractPoint(_graphicOffset);
-		if (isPixelPerfectRender(camera))
-			_point.floor();
-			
-		_point.copyToFlash(_flashPoint);
-		camera.copyPixels(_frame, framePixels, _flashRect, _flashPoint, colorTransform, blend, antialiasing);
-	}
-	
-	override function drawComplex(camera:FlxCamera):Void
-	{
-		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
-		_matrix.translate(-origin.x, -origin.y);
-		_matrix.scale(scale.x, scale.y);
-		
-		if (bakedRotationAngle <= 0)
-		{
-			updateTrig();
-			
-			if (angle != 0)
-				_matrix.rotateWithTrig(_cosAngle, _sinAngle);
-		}
-		
-		// same as super but checks _graphicOffset
-		getScreenPosition(_point, camera).subtractPoint(offset).subtractPoint(_graphicOffset);
 		_point.add(origin.x, origin.y);
 		_matrix.translate(_point.x, _point.y);
 		
@@ -1405,12 +1356,6 @@ enum FlxTextBorderStyle
 	 * A simple shadow to the lower-right
 	 */
 	SHADOW;
-	
-	/**
-	 * A shadow that allows custom placement
-	 * **Note:** Ignores borderSize
-	 */
-	SHADOW_XY(offsetX:Float, offsetY:Float);
 	
 	/**
 	 * A shadow that allows custom placement

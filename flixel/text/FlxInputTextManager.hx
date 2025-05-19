@@ -90,6 +90,7 @@ class FlxInputTextManager extends FlxBasic
 		FlxG.stage.window.onKeyUp.remove(onKeyUp);
 		#end
 	}
+
 	/**
 	 * Registers an input text object, and initiates the event listeners if it's
 	 * the first one to be added.
@@ -152,6 +153,7 @@ class FlxInputTextManager extends FlxBasic
 		// Adding new lines is handled inside FlxInputText
 		if (event.text.length == 1 && event.text.charCodeAt(0) == KeyCode.RETURN)
 			return;
+
 		if (focus != null)
 		{
 			dispatchTypingAction(ADD_TEXT(event.text));
@@ -171,6 +173,7 @@ class FlxInputTextManager extends FlxBasic
 	{
 		if (focus == null)
 			return;
+
 		#if flash
 		// COPY, CUT, PASTE and SELECT_ALL events will only be dispatched if the stage has a focus.
 		// Let's set one manually (just the stage itself)
@@ -234,6 +237,7 @@ class FlxInputTextManager extends FlxBasic
 				dispatchTypingAction(COMMAND(SELECT_ALL));
 			default:
 		}
+
 		#if (html5 && FLX_KEYBOARD)
 		// On HTML5, the SPACE key gets added to `FlxG.keys.preventDefaultKeys` by default, which also
 		// stops it from dispatching a text input event. We need to call `onTextInput()` manually
@@ -243,6 +247,7 @@ class FlxInputTextManager extends FlxBasic
 		}
 		#end
 	}
+
 	#if flash
 	/**
 	 * Called when an `onKeyUp` event is recieved. This is used to reset the stage's focus
@@ -328,39 +333,48 @@ enum MoveCursorAction
 	 * Moves the cursor one character to the left.
 	 */
 	LEFT;
+
 	/**
 	 * Moves the cursor one character to the right.
 	 */
 	RIGHT;
+
 	/**
 	 * Moves the cursor up to the previous line.
 	 */
 	UP;
+
 	/**
 	 * Moves the cursor down to the next line.
 	 */
 	DOWN;
+
 	/**
 	 * Moves the cursor to the beginning of the text.
 	 */
 	TOP;
+
 	/**
 	 * Moves the cursor to the end of the text.
 	 */
 	BOTTOM;
+
 	/**
 	 * Moves the cursor to the beginning of the current line.
 	 */
 	LINE_LEFT;
+
 	/**
 	 * Moves the cursor to the end of the current line.
 	 */
 	LINE_RIGHT;
+
 	/**
 	 * Moves the cursor to the beginning of the previous word, or the
 	 * start of the text if there aren't any more words.
 	 */
 	WORD_LEFT;
+
 	/**
 	 * Moves the cursor to the beginning of the next word, or the end
 	 * of the text if there aren't any more words.
@@ -374,24 +388,34 @@ enum TypingCommand
 	 * Enters a new line into the text.
 	 */
 	NEW_LINE;
+
 	/**
 	 * Deletes the character to the left of the cursor, or the selection if
 	 * there's already one.
 	 */
 	DELETE_LEFT;
+
 	/**
 	 * Deletes the character to the right of the cursor, or the selection if
 	 * there's already one.
 	 */
 	DELETE_RIGHT;
+
 	/**
 	 * Copies the current selection into the clipboard.
 	 */
 	COPY;
 	/**
+	 * Copies the current selection into the clipboard and then removes it
+	 * from the text field.
+	 */
+	CUT;
+
+	/**
 	 * Pastes the clipboard's text into the field.
 	 */
 	PASTE;
+
 	/**
 	 * Selects all of the text in the field.
 	 */
