@@ -110,20 +110,7 @@ class FlxSave implements IFlxDestroyable
 		return SharedObject.__resolveClass(name);
 		#end
 	}
-	
-	/**
-	 * The default class resolver of a FlxSave, handles certain Flixel and Openfl classes
-	 */
-	public static inline function resolveFlixelClasses(name:String)
-	{
-		#if flash
-		return Type.resolveClass(name);
-		#else
-		@:privateAccess
-		return SharedObject.__resolveClass(name);
-		#end
-	}
-	
+
 	/**
 	 * Allows you to directly access the data container in the local shared object.
 	 */
@@ -791,8 +778,4 @@ enum FlxSaveStatus
 	@:noCompletion
 	@:deprecated("FlxSaveStatus.ERROR is never used, it has been replaced by SAVE_ERROR")
 	ERROR(msg:String);
-	/**
-	 * There was an issue while loading
-	 */
-	LOAD_ERROR(type:LoadFailureType);
 }
