@@ -3,7 +3,6 @@ package flixel;
 import flixel.FlxBasic.IFlxBasic;
 import flixel.animation.FlxAnimationController;
 import flixel.graphics.FlxGraphic;
-import flixel.graphics.tile.FlxGraphicsShader;
 import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.graphics.frames.FlxTileFrames;
@@ -248,12 +247,6 @@ class FlxSprite extends FlxObject
 	public var offset(default, null):FlxPoint;
 
 	/**
-	 * The position of the sprite's graphic relative to the frame, scaling and angles. For example, `offset.x = 10;` with
-	 * a scale of 2 will move the sprite 20 pixels to the left.
-	 */
-	public var frameOffset(default, null):FlxPoint;
-
-	/**
 	 * Change the size of your sprite's graphic.
 	 * NOTE: The hitbox is not automatically adjusted, use `updateHitbox()` for that.
 	 * **WARNING:** With `FlxG.renderBlit`, scaling sprites decreases rendering performance by a factor of about x10!
@@ -357,12 +350,6 @@ class FlxSprite extends FlxObject
 	var _scaledOrigin:FlxPoint;
 
 	/**
-	 *  Helper variable
-	 */
-	@:noCompletion
-	var _scaledFrameOffset:FlxPoint;
-
-	/**
 	 * These vars are being used for rendering in some of `FlxSprite` subclasses (`FlxTileblock`, `FlxBar`,
 	 * and `FlxBitmapText`) and for checks if the sprite is in camera's view.
 	 */
@@ -410,13 +397,11 @@ class FlxSprite extends FlxObject
 		_flashRect2 = new Rectangle();
 		_flashPointZero = new Point();
 		offset = FlxPoint.get();
-		frameOffset = FlxPoint.get();
 		origin = FlxPoint.get();
 		scale = FlxPoint.get(1, 1);
 		_halfSize = FlxPoint.get();
 		_matrix = new FlxMatrix();
 		_scaledOrigin = new FlxPoint();
-		_scaledFrameOffset = new FlxPoint();
 	}
 
 	/**
@@ -436,12 +421,10 @@ class FlxSprite extends FlxObject
 		animation = FlxDestroyUtil.destroy(animation);
 
 		offset = FlxDestroyUtil.put(offset);
-		frameOffset = FlxDestroyUtil.put(frameOffset);
 		origin = FlxDestroyUtil.put(origin);
 		scale = FlxDestroyUtil.put(scale);
 		_halfSize = FlxDestroyUtil.put(_halfSize);
 		_scaledOrigin = FlxDestroyUtil.put(_scaledOrigin);
-		_scaledFrameOffset = FlxDestroyUtil.put(_scaledFrameOffset);
 		_lastClipRect = FlxDestroyUtil.put(_lastClipRect);
 
 		framePixels = FlxDestroyUtil.dispose(framePixels);
@@ -832,12 +815,6 @@ class FlxSprite extends FlxObject
 		
 		if (dirty) // rarely
 			calcFrame(useFramePixels);
-
-		if (_frame.frame != null)
-		{
-			if (shader != null && (shader is FlxGraphicsShader))
-				shader.setCamSize(_frame.frame.x, _frame.frame.y, _frame.frame.width, _frame.frame.height);
-		}
 
 		for (camera in getCamerasLegacy())
 		{
@@ -1420,13 +1397,12 @@ class FlxSprite extends FlxObject
 		if (pixelPerfectPosition)
 			newRect.floor();
 		_scaledOrigin.set(origin.x * scale.x, origin.y * scale.y);
-		_scaledFrameOffset.set(frameOffset.x * scale.x, frameOffset.y * scale.y);
 		newRect.x += -Std.int(camera.scroll.x * scrollFactor.x) - offset.x + origin.x - _scaledOrigin.x;
 		newRect.y += -Std.int(camera.scroll.y * scrollFactor.y) - offset.y + origin.y - _scaledOrigin.y;
 		if (isPixelPerfectRender(camera))
 			newRect.floor();
 		newRect.setSize(frameWidth * Math.abs(scale.x), frameHeight * Math.abs(scale.y));
-		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect, _scaledFrameOffset);
+		return newRect.getRotatedBounds(angle, _scaledOrigin, newRect);
 	}
 	
 	/**
