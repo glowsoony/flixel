@@ -1,5 +1,6 @@
 package flixel.system.macros;
 
+#if macro
 import haxe.io.Path;
 import haxe.macro.Compiler;
 import haxe.macro.Context;
@@ -9,8 +10,6 @@ using StringTools;
 #if (flixel_addons >= "3.2.2")
 import flixel.addons.system.macros.FlxAddonDefines;
 #end
-
-
 
 private enum UserDefines
 {
@@ -355,3 +354,4 @@ class FlxDefines
 		Context.fatalError(message, pos);
 	}
 }
+#end
