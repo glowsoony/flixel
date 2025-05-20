@@ -898,17 +898,8 @@ class FlxSprite extends FlxObject
 			matrix.ty = Math.floor(matrix.ty);
 		}
 		
-		//Borrowed form CNE (CodenameEngine)
-        matrixAddition(_matrix, camera);
-		
 		camera.drawPixels(frame, framePixels, matrix, colorTransform, blend, antialiasing, shader);
 	}
-
- 	/**
-	 * Made in case developer wanna finalize stuff with the matrix.
-     * Borrowed form CNE (CodenameEngine)
-	 */
-	public function matrixAddition(matrix:FlxMatrix, camera:FlxCamera) {}
 
 	/**
 	 * Stamps / draws another `FlxSprite` onto this `FlxSprite`.
